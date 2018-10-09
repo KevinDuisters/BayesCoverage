@@ -45,7 +45,7 @@ for(k in 1:2){
 
 # plot
 
-pdf("figIntroA.pdf",width=9)
+pdf("Figures/figIntroA.pdf",width=9)
 par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 #layout(matrix(c(1,2,3,4,5,6),2,3,byrow=T),widths = c(1,2,2),heights=rep(1,3) )
 
@@ -155,7 +155,7 @@ text(x=-3.25,y=0.3,expression(Delta[lambda](x)),adj=0)
 
 dev.off()
 
-pdf("figIntroB.pdf",width=9)
+pdf("figures/figIntroB.pdf",width=9)
 par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 #layout(matrix(c(1,2,3,4,5,6),2,3,byrow=F),widths = c(1,2,2),heights=rep(1,3) )
 
