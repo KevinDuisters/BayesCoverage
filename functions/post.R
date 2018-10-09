@@ -1,3 +1,10 @@
+#--------------------------------------------------------------------------------------------------------------------#
+# On frequentist coverage of Bayesian credible sets for estimation of the mean under constraints
+# Duisters & Schmidt-Hieber
+# Math Institute, Leiden University
+# Oct 2018
+#--------------------------------------------------------------------------------------------------------------------#
+
 post <- function(thetaseq,x,lambda,w,dist){
   
   if(dist=="Lap"){

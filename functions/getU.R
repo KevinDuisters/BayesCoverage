@@ -1,3 +1,10 @@
+#--------------------------------------------------------------------------------------------------------------------#
+# On frequentist coverage of Bayesian credible sets for estimation of the mean under constraints
+# Duisters & Schmidt-Hieber
+# Math Institute, Leiden University
+# Oct 2018
+#--------------------------------------------------------------------------------------------------------------------#
+
 getU <- function(x,alpha,lambda,w,dist){  
   
   if(dist=="Lap"){
@@ -16,18 +23,14 @@ getU <- function(x,alpha,lambda,w,dist){
   z <- (1-w)*g(x) +w*Deltabar(x,lambda)
   aux1 <- 1 - (1/2)*(alpha*(z/w)+Delta(x,lambda))
   aux2 <- 1 + G(-lambda-x) - alpha*(z/w)
-  #aux3 <- 1 - (1/2)*(alpha*(z/w) + ((1-w)/w)*g(x))
   aux3 <- 1 - (1/2)*(alpha*(z/w))
   
   if((1-w)*(g(x)/z)>= 1 - alpha){# point mass assumes entire credible set already 
-    
-    #U <- lambda # or put it at zero? Better for interval length plot later?
     U <- NA
     regime <- 3 # proxy
     
   }else{
     if((G(lambda-x) < aux3)){ # U > lambda; 
-    #if((x>0)|(G(lambda-x) < aux3)){ # U > lambda; 
       if(G(x-lambda) > aux1){# L(x) > lambda
         U <- x + Ginv(aux1)
         regime <- 1
