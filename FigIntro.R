@@ -43,8 +43,9 @@ for(k in 1:2){
 
 # plot
 
-pdf("Figures/figIntro.pdf",width=9)
-par(mfrow=c(3,2),xpd=F,mar=c(4,4,2,2))
+pdf("Figures/figIntrotop.pdf",width=9)
+par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
+
 x <- 1.25 
 
 # a top
@@ -112,15 +113,18 @@ polygon(c(-4,-3.5,-3.5,-4,-4),c(0.275,0.275,0.325,0.325,0.275),col="grey",densit
 text(x=-3.25,y=0.3,expression(Delta[lambda](x)),adj=0)
 
 
+dev.off()
+pdf("Figures/figIntrobottom.pdf",width=9)
+par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 # a bottom
-xstar.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid[,1]>theta0))]})
-xstar.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid[,1]<theta0))]})
-xtilde.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid[,1]<theta0))]})
-xtilde.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid[,1]>theta0))]})
+xU.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid[,1]>theta0))]})
+xU.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid[,1]<theta0))]})
+xL.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid[,1]<theta0))]})
+xL.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid[,1]>theta0))]})
 
-C.inf <- G(xtilde.inf-thetaseq)-G(xstar.sup-thetaseq)
-C.sup <- G(xtilde.sup-thetaseq)-G(xstar.inf-thetaseq)
+C.inf <- G(xL.inf-thetaseq)-G(xU.sup-thetaseq)
+C.sup <- G(xL.sup-thetaseq)-G(xU.inf-thetaseq)
 
 plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
 abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
@@ -135,20 +139,20 @@ polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq
 
 
 # translate to theta regimes
-starsupgrid <- sapply(xstar.sup,function(x) regimeU[which(xgrid==x),1])
-starinfgrid <- sapply(xstar.inf,function(x) regimeU[which(xgrid==x),1])
-tildesupgrid <- sapply(xtilde.sup,function(x) regimeU[which(xgrid==x),1])
-tildeinfgrid <- sapply(xtilde.inf,function(x) regimeU[which(xgrid==x),1])
+starsupgrid <- sapply(xU.sup,function(x) regimeU[which(xgrid==x),1])
+starinfgrid <- sapply(xU.inf,function(x) regimeU[which(xgrid==x),1])
+tildesupgrid <- sapply(xL.sup,function(x) regimeU[which(xgrid==x),1])
+tildeinfgrid <- sapply(xL.inf,function(x) regimeU[which(xgrid==x),1])
 
 for(r in 5:1){
   
-  # sup cov  (sup xtilde, inf xstar); for theta0>lambda regime change in xstar, for theta0 < - lambda regime change in xtilde
+  # sup cov  (sup xL, inf xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
   regmin <- (thetaseq < (- lambda)) & (tildesupgrid==r)
   regplus <- (thetaseq > (lambda))  & (starinfgrid==r)
   lines(thetaseq[regmin], C.sup[regmin],col="black")
   lines(thetaseq[regplus], C.sup[regplus],col="black")
   
-  # inf cov  (inf xtilde, sup xstar); for theta0>lambda regime change in xstar, for theta0 < - lambda regime change in xtilde
+  # inf cov  (inf xL, sup xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
   regmin <- (thetaseq < (- lambda)) & (tildeinfgrid==r)
   regplus <- (thetaseq > (lambda))  & (starsupgrid==r)
   lines(thetaseq[regmin], C.inf[regmin],lty=2,col="blue")
@@ -165,17 +169,17 @@ for(r in 5:1){
 }
 
 abline(v=c(-lambda,lambda),lty=3,col="grey")
-mtext(c(expression(-lambda),expression(lambda)),line=-2,side=1,at=c(-lambda,lambda))
+mtext(c(expression(-lambda),expression(lambda)),line=1,side=1,at=c(-lambda,lambda))
 
 
 # b bottom
-xstar.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid[,2]>theta0))]})
-xstar.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid[,2]<theta0))]})
-xtilde.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid[,2]<theta0))]})
-xtilde.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid[,2]>theta0))]})
+xU.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid[,2]>theta0))]})
+xU.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid[,2]<theta0))]})
+xL.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid[,2]<theta0))]})
+xL.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid[,2]>theta0))]})
 
-C.inf <- G(xtilde.inf-thetaseq)-G(xstar.sup-thetaseq)
-C.sup <- G(xtilde.sup-thetaseq)-G(xstar.inf-thetaseq)
+C.inf <- G(xL.inf-thetaseq)-G(xU.sup-thetaseq)
+C.sup <- G(xL.sup-thetaseq)-G(xU.inf-thetaseq)
 
 plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
 abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
@@ -187,20 +191,20 @@ polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq
         col="grey90",border="white",density=20,angle=-45)
 
 # translate to theta regimes
-starsupgrid <- sapply(xstar.sup,function(x) regimeU[which(xgrid==x),2])
-starinfgrid <- sapply(xstar.inf,function(x) regimeU[which(xgrid==x),2])
-tildesupgrid <- sapply(xtilde.sup,function(x) regimeU[which(xgrid==x),2])
-tildeinfgrid <- sapply(xtilde.inf,function(x) regimeU[which(xgrid==x),2])
+starsupgrid <- sapply(xU.sup,function(x) regimeU[which(xgrid==x),2])
+starinfgrid <- sapply(xU.inf,function(x) regimeU[which(xgrid==x),2])
+tildesupgrid <- sapply(xL.sup,function(x) regimeU[which(xgrid==x),2])
+tildeinfgrid <- sapply(xL.inf,function(x) regimeU[which(xgrid==x),2])
 
 for(r in 5:1){
   
-  # sup cov  (sup xtilde, inf xstar); for theta0>lambda regime change in xstar, for theta0 < - lambda regime change in xtilde
+  # sup cov  (sup xL, inf xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
   regmin <- (thetaseq < (- lambda)) & (tildesupgrid==r)
   regplus <- (thetaseq > (lambda))  & (starinfgrid==r)
   lines(thetaseq[regmin], C.sup[regmin],col="black")
   lines(thetaseq[regplus], C.sup[regplus],col="black")
   
-  # inf cov  (inf xtilde, sup xstar); for theta0>lambda regime change in xstar, for theta0 < - lambda regime change in xtilde
+  # inf cov  (inf xL, sup xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
   regmin <- (thetaseq < (- lambda)) & (tildeinfgrid==r)
   regplus <- (thetaseq > (lambda))  & (starsupgrid==r)
   lines(thetaseq[regmin], C.inf[regmin],lty=2,col="blue")

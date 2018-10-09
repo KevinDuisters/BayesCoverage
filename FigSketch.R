@@ -12,7 +12,7 @@ source("getU.R")
 # ------------------------------------------------------------------------------------------------------------ 
 # Plots
 # ------------------------------------------------------------------------------------------------------------ 
-# Fig 3: Visualize L,U and inverse xtilde, xstar 
+# Fig 2: Visualize L,U and inverse xtilde, xstar 
 dist <- "Normal"
 #lambda<-7.5
 lambda<-0.75
@@ -51,7 +51,7 @@ c(xstar.inf[loc2],xtilde.sup[loc2])
 
 output <- T
 if(output==T){
-#pdf("fig3.pdf",width=9)
+#pdf("fig2.pdf",width=9)
   pdf("figSI1.pdf",width=9)  # w=0.2
 
 ranges <- c(-10-lambda,10+lambda)
