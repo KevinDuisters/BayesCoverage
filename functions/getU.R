@@ -17,6 +17,18 @@ getU <- function(x,alpha,lambda,w,dist){
     G <- function(x,theta0=0){pnorm(x,theta0,1)}
     Ginv <- function(p){qnorm(p)}  # make precise by always considering small p as opposed to large  
   }
+  if(dist=="t3"){
+    g <- function(x,theta0=0){dt(x,3)}
+    G <- function(x,theta0=0){pt(x,3)}  
+    Ginv <- function(p){qt(p,3)}
+  }
+  if(dist=="Cauchy"){
+    g <- function(x,theta0=0){dcauchy(x,theta0,1)}
+    G <- function(x,theta0=0){pcauchy(x,theta0,1)}  
+    Ginv <- function(p){qcauchy(p)}
+  }
+  
+  
   Delta <- function(x,lambda){G(lambda-x) - G(-lambda-x)  }
   Deltabar <- function(x,lambda){G(x-lambda)+G(-lambda-x)}  # 1-Delta is much more precise
   
@@ -26,9 +38,8 @@ getU <- function(x,alpha,lambda,w,dist){
   aux3 <- 1 - (1/2)*(alpha*(z/w))
   
   if((1-w)*(g(x)/z)>= 1 - alpha){# point mass assumes entire credible set already 
-    U <- NA
+    U <- 0
     regime <- 3 # proxy
-    
   }else{
     if((G(lambda-x) < aux3)){ # U > lambda; 
       if(G(x-lambda) > aux1){# L(x) > lambda

@@ -15,7 +15,7 @@ alpha <- 0.05
 xl<-7
 ranges <- c(-xl,xl)
 
-thetaseq <- c(seq(-xl,-lambda-0.001,0.001),seq(lambda+0.001,xl,0.001))
+thetaseq <- c(seq(-xl,-lambda-0.005,0.005),seq(lambda+0.005,xl,0.005))
 sub1 <- thetaseq<(-lambda)
 sub2 <- thetaseq>=(-lambda) & thetaseq <= lambda
 sub3 <- thetaseq>lambda
@@ -131,10 +131,8 @@ abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",
 text(x=rep(lambda+4.75,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
 
 
-polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),
-        col="grey90",border="white",density=20,angle=45)
-polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),
-        col="grey90",border="white",density=20,angle=-45)
+polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
+polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
 
 
 
@@ -152,24 +150,26 @@ for(r in 5:1){
   lines(thetaseq[regmin], C.sup[regmin],col="black")
   lines(thetaseq[regplus], C.sup[regplus],col="black")
   
-  # inf cov  (inf xL, sup xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
-  regmin <- (thetaseq < (- lambda)) & (tildeinfgrid==r)
-  regplus <- (thetaseq > (lambda))  & (starsupgrid==r)
-  lines(thetaseq[regmin], C.inf[regmin],lty=2,col="blue")
-  lines(thetaseq[regplus], C.inf[regplus],lty=2,col="blue")
   
-  # ablines (inf)
- # if(r==5){mini <- min(thetaseq)}
-#  maxi <- max(thetaseq[regmin | regplus])
-#  if(r>1){abline(v=maxi,lty=3,col="grey")}
-#  if(r==1){maxi <- max(thetaseq)}
-#  if(r!=3){mtext(as.roman(r),line=-2,side=3,adj=0.5,at=(maxi+mini)/2)}else{mtext(c("III","III"),line=-2,side=3,adj=0.5,at=c((maxi+lambda)/2,(-lambda-maxi)/2))}
- # mini <- maxi        
-
+  # inf cov  (inf xL, sup xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
+  #regmin <- (thetaseq < (- lambda)) & (tildeinfgrid==r)
+  #regplus <- (thetaseq > (lambda))  & (starsupgrid==r)
+  #lines(thetaseq[regmin], C.inf[regmin],lty=2,col="blue",lwd=1.5)
+  #lines(thetaseq[regplus], C.inf[regplus],lty=2,col="blue",lwd=1.5)
 }
 
 abline(v=c(-lambda,lambda),lty=3,col="grey")
 mtext(c(expression(-lambda),expression(lambda)),line=1,side=1,at=c(-lambda,lambda))
+
+# some manual adjustments for visualization finetuning
+points(c(-lambda,lambda),rep(C.sup[which.min((thetaseq-lambda)^2)],2),pch=16) # discontinuity points
+
+# discontinuity between regimes
+bool <- (((thetaseq > lambda) & (starinfgrid==3)))
+points(c(-max(thetaseq[bool]),max(thetaseq[bool])),rep(C.sup[min(which(thetaseq==max(thetaseq[bool])))],2),pch=21,bg="white")
+bool <- (((thetaseq > lambda) & (starinfgrid==2)))
+points(c(-min(thetaseq[bool]),min(thetaseq[bool])),rep(C.sup[min(which(thetaseq==min(thetaseq[bool])))],2),pch=21,bg=1)
+
 
 
 # b bottom
@@ -205,18 +205,10 @@ for(r in 5:1){
   lines(thetaseq[regplus], C.sup[regplus],col="black")
   
   # inf cov  (inf xL, sup xU); for theta0>lambda regime change in xU, for theta0 < - lambda regime change in xL
-  regmin <- (thetaseq < (- lambda)) & (tildeinfgrid==r)
-  regplus <- (thetaseq > (lambda))  & (starsupgrid==r)
-  lines(thetaseq[regmin], C.inf[regmin],lty=2,col="blue")
-  lines(thetaseq[regplus], C.inf[regplus],lty=2,col="blue")
-  
-  # ablines (inf)
-#  if(r==5){mini <- min(thetaseq)}
-#  maxi <- max(thetaseq[regmin | regplus])
-#  if(r>1){abline(v=maxi,lty=3,col="grey")}
-#  if(r==1){maxi <- max(thetaseq)}
-#  if(r!=3){mtext(as.roman(r),line=-2,side=3,adj=0.5,at=(maxi+mini)/2)}else{mtext(c("III","III"),line=-2,side=3,adj=0.5,at=c((maxi+lambda)/2,(-lambda-maxi)/2))}
-#  mini <- maxi    
+  #regmin <- (thetaseq < (- lambda)) & (tildeinfgrid==r)
+  #regplus <- (thetaseq > (lambda))  & (starsupgrid==r)
+  #lines(thetaseq[regmin], C.inf[regmin],lty=2,col="blue",lwd=1.5)
+  #lines(thetaseq[regplus], C.inf[regplus],lty=2,col="blue",lwd=1.5)
   
 }
 
@@ -224,6 +216,9 @@ abline(v=c(-lambda,lambda),lty=3,col="grey")
 mtext(c(expression(-lambda),expression(lambda)),line=1,side=1,at=c(-lambda,lambda))
 
 
+# some manual adjustments for visualization finetuning
+points(0,1,pch=21,bg=1) # theta_0 = 0 always covered since 0 always in HPD for w<1
+points(c(-lambda,lambda),rep(C.sup[which.min((thetaseq-lambda)^2)],2),pch=21,bg=1) # discontinuity points
 
 dev.off()
 
