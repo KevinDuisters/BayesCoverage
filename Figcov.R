@@ -24,7 +24,7 @@ par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 lambdas <- c(0.75,7.5)
 for(lambda in lambdas){
-  thetaseq <- seq(lambda+0.005,lambda+15,0.005)
+  thetaseq <- seq(lambda+0.005,lambda+10,0.005)
   coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T,cols=c("black","red","blue","orange","green")) 
   coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T,cols=c("black","red","blue","orange","green"))
 }
@@ -37,8 +37,9 @@ par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 lambdas <- c(0.75,7.5)
 for(lambda in lambdas){
-  thetaseq <- seq(lambda+0.005,lambda+15,0.005)
-  coverage(thetaseq,alpha,lambda,w,dist="t3",plot.cov=T,cols=c("black","red","blue","orange","green")) 
+  thetaseq <- seq(lambda+0.005,lambda+10,0.005)
+  coverage(thetaseq,alpha,lambda,w,dist="t5",plot.cov=T,cols=c("black","red","blue","orange","green")) 
+  #coverage(thetaseq,alpha,lambda,w,dist="t3",plot.cov=T,cols=c("black","red","blue","orange","green")) 
   #coverage(thetaseq,alpha,lambda,w,dist="Cauchy",plot.cov=T,cols=c("black","red","blue","orange","green"))
 }
 

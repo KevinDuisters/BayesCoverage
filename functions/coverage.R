@@ -32,6 +32,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
   if(dist=="Lap"){G <- function(x,theta0=0){plaplace(x,m=theta0,s=1)} }
   if(dist=="Normal"){G <- function(x,theta0=0){pnorm(x,theta0,1)} }
   if(dist=="t3"){G <- function(x){pt(x,3)} }
+  if(dist=="t5"){G <- function(x){pt(x,5)} }
   if(dist=="Cauchy"){G <- function(x,theta0=0){pcauchy(x,theta0,1)} }
   
   C.inf <- G(xtilde.inf-thetaseq)-G(xstar.sup-thetaseq)
