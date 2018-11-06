@@ -12,14 +12,14 @@ source("functions/getU.R")
 # Plots
 #--------------------------------------------------------------------------------------------------------------------#
 # Fig 2: Visualize L,U and inverse xL, xU 
-dist <- "Lap"
+dist <- "t3"
 lambda<-7.5
 alpha <- 0.05
-#w <- 1
-w<-0.2
+w <- 1
+#w<-0.2
 
 
-xgrid <- seq(-lambda-15,lambda+15,0.01)
+xgrid <- seq(-lambda-40,lambda+40,0.01)
 Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
 
 for(i in 1:length(xgrid)){
@@ -33,7 +33,7 @@ for(i in 1:length(xgrid)){
   regimeL[i] <- out.L$regime
 }
 
-theta0seq <- c(seq(-lambda-10,-lambda-0.01,0.01),seq(lambda+0.01,lambda+10,0.01))
+theta0seq <- c(seq(-lambda-35,-lambda-0.01,0.01),seq(lambda+0.01,lambda+35,0.01))
 xU.inf <- sapply(theta0seq,function(theta0){xgrid[min(which(Ugrid>theta0))]})
 xU.sup <- sapply(theta0seq,function(theta0){xgrid[max(which(Ugrid<theta0))]})
 xL.sup <-sapply(theta0seq,function(theta0){xgrid[max(which(Lgrid<theta0))]})
@@ -41,10 +41,10 @@ xL.inf <- sapply(theta0seq,function(theta0){xgrid[min(which(Lgrid>theta0))]})
 
 
 #pdf("Figures/figLU.pdf",width=9)
-pdf("Figures/figSI1.pdf",width=9)  # w=0.2
+#pdf("Figures/figSI1.pdf",width=9)  # w=0.2
 
 par(mfrow=c(1,2))
-ranges <- c(-15,15)
+ranges <- c(-25,30)
 
 # Left
 plot(xgrid,xgrid,ylab=expression(paste(L[alpha](x)," and ",U[alpha](x))),xlab=expression(x),type="n",xlim=ranges,ylim=ranges,asp=1)
@@ -112,6 +112,6 @@ if(w < 1){
 
 
 
-dev.off()
+#dev.off()
 
 

@@ -22,6 +22,11 @@ getU <- function(x,alpha,lambda,w,dist){
     G <- function(x,theta0=0){pt(x,3)}  
     Ginv <- function(p){qt(p,3)}
   }
+  if(dist=="t5"){
+    g <- function(x,theta0=0){dt(x,5)}
+    G <- function(x,theta0=0){pt(x,5)}  
+    Ginv <- function(p){qt(p,5)}
+  }
   if(dist=="Cauchy"){
     g <- function(x,theta0=0){dcauchy(x,theta0,1)}
     G <- function(x,theta0=0){pcauchy(x,theta0,1)}  
