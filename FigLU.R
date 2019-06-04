@@ -16,7 +16,7 @@ dist <- "Lap"
 lambda<-7.5
 alpha <- 0.05
 #w <- 1
-w<-0.2
+w<-0.9
 
 
 xgrid <- seq(-lambda-15,lambda+15,0.01)

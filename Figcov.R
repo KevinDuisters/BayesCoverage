@@ -16,6 +16,7 @@ source("functions/coverage.R")
 # Plot Coverage
 alpha <- 0.05
 w <- 1
+w=0.2
 #w=0.2 # Supplemental
 
 if(w==1){pdf("Figures/figcov.pdf",width=9)}else{pdf("Figures/SFcov.pdf",width=9)}
@@ -23,7 +24,8 @@ par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 lambdas <- c(0.75,7.5)
 for(lambda in lambdas){
-  thetaseq <- seq(lambda+0.005,lambda+10,0.005)
+  #thetaseq <- seq(lambda+0.005,lambda+10,0.005)
+  thetaseq <- seq(lambda+0.005,lambda+20,0.01)
   coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T,cols=c("black","red","blue","orange","green")) 
   coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T,cols=c("black","red","blue","orange","green"))
 }

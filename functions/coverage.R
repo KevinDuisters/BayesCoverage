@@ -24,10 +24,10 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
     regimeL[i] <- out.L$regime
   }
   
-  xstar.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid>theta0))]})
-  xstar.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid<theta0))]  })
-  xtilde.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid<theta0))]})
-  xtilde.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid>theta0))]})
+  XU.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid>theta0))]})
+  XU.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid<theta0))]  })
+  XL.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid<theta0))]})
+  XL.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid>theta0))]})
   
   if(dist=="Lap"){G <- function(x,theta0=0){plaplace(x,m=theta0,s=1)} }
   if(dist=="Normal"){G <- function(x,theta0=0){pnorm(x,theta0,1)} }
@@ -35,8 +35,8 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
   if(dist=="t5"){G <- function(x){pt(x,5)} }
   if(dist=="Cauchy"){G <- function(x,theta0=0){pcauchy(x,theta0,1)} }
   
-  C.inf <- G(xtilde.inf-thetaseq)-G(xstar.sup-thetaseq)
-  C.sup <- G(xtilde.sup-thetaseq)-G(xstar.inf-thetaseq)
+  C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
+  C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
   
   if(plot.cov == F){
     return(list(C.inf=C.inf, C.sup=C.sup, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL))
@@ -51,9 +51,9 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
       
       
       for(r in 5:1){
-          reg <- (sapply(xstar.sup,function(x) regimeU[which(xgrid==x)])==r) # inf
+          reg <- (sapply(XU.sup,function(x) regimeU[which(xgrid==x)])==r) # inf
           if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r],lty=2)}
-          reg <- (sapply(xstar.inf,function(x) regimeU[which(xgrid==x)])==r)# Sup
+          reg <- (sapply(XU.inf,function(x) regimeU[which(xgrid==x)])==r)# Sup
           if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r])}
       }
     }
