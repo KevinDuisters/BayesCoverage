@@ -2,7 +2,7 @@
 # On frequentist coverage of Bayesian credible sets for estimation of the mean under constraints
 # Duisters & Schmidt-Hieber
 # Math Institute, Leiden University
-# Oct 2018
+# June 2019
 #--------------------------------------------------------------------------------------------------------------------#
 # Source functions
 source("functions/post.R")
@@ -38,11 +38,8 @@ for(k in 1:2){
 }
 }
  
-
-
-
+#--------------------------------------------------------------------------------------------------------------------#
 # plot
-
 pdf("Figures/figIntrotop.pdf",width=9)
 par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 
