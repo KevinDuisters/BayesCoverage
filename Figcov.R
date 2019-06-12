@@ -9,7 +9,6 @@
 library(rmutil) #dlaplace
 
 # source functions
-source("functions/densities.R")
 source("functions/getU.R")
 source("functions/coverage.R")
 

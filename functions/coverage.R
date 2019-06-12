@@ -38,7 +38,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
   #plot(thetaseq,(1-alpha)/2*G(lambda-XL.inf),ylim=c(0,alpha/2))
   #lines(thetaseq,alpha*G(lambda-XU.sup),col="red")
   #abline(h=(1-alpha)/2*G(Ginv(alpha/(1+alpha))),lty=2,col="green")
-  abline(h=(1-alpha)/2*G(3*Ginv(alpha/(1+alpha))),lty=2,col="blue")
+  #abline(h=(1-alpha)/2*G(3*Ginv(alpha/(1+alpha))),lty=2,col="blue")
   #abline(h=(1-alpha)/2*G(Ginv(alpha/(1+alpha)) + Ginv(2*alpha/(2+alpha))),lty=2)
   #abline(h=alpha^2/(2+alpha),lty=2,col="red")
   
