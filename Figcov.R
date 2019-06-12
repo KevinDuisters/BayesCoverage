@@ -25,7 +25,7 @@ par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 lambdas <- c(0.75,7.5)
 for(lambda in lambdas){
   #thetaseq <- seq(lambda+0.005,lambda+10,0.005)
-  thetaseq <- seq(lambda+0.005,lambda+20,0.01)
+  thetaseq <- seq(lambda+0.005,lambda+30,0.05)
   coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T,cols=c("black","red","blue","orange","green")) 
   coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T,cols=c("black","red","blue","orange","green"))
 }

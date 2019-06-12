@@ -10,7 +10,7 @@
 coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)){
   
   #xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
-  xgrid <- seq(min(thetaseq)-30,max(thetaseq)+30,0.005)
+  xgrid <- seq(min(thetaseq)-30,max(thetaseq)+30,0.01)
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
   
   for(i in 1:length(xgrid)){

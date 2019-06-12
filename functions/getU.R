@@ -18,15 +18,25 @@ getU <- function(x,alpha,lambda,w,dist){
     G <- function(x,theta0=0){pnorm(x,theta0,1)}
     Ginv <- function(p){qnorm(p)}  # make precise by always considering small p as opposed to large  
   }
-  if(dist=="t3"){
-    g <- function(x,theta0=0){dt(x,3)}
-    G <- function(x,theta0=0){pt(x,3)}  
-    Ginv <- function(p){qt(p,3)}
+  if(dist=="t10"){
+    g <- function(x,theta0=0){dt(x,10)}
+    G <- function(x,theta0=0){pt(x,10)}  
+    Ginv <- function(p){qt(p,10)}
   }
   if(dist=="t5"){
     g <- function(x,theta0=0){dt(x,5)}
     G <- function(x,theta0=0){pt(x,5)}  
     Ginv <- function(p){qt(p,5)}
+  }
+  if(dist=="t3"){
+    g <- function(x,theta0=0){dt(x,3)}
+    G <- function(x,theta0=0){pt(x,3)}  
+    Ginv <- function(p){qt(p,3)}
+  }
+  if(dist=="t2"){
+    g <- function(x,theta0=0){dt(x,2)}
+    G <- function(x,theta0=0){pt(x,2)}  
+    Ginv <- function(p){qt(p,2)}
   }
   if(dist=="Cauchy"){
     g <- function(x,theta0=0){dcauchy(x,theta0,1)}
