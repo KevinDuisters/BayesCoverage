@@ -7,7 +7,6 @@
 #--------------------------------------------------------------------------------------------------------------------#
 # source functions
 library(rmutil) #dlaplace
-source("functions/densities.R")
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Plots
@@ -16,7 +15,31 @@ source("functions/densities.R")
 dist <- "Lap"
 
 # localize g and G functions
-densities(dist)
+if(dist=="Lap"){
+  g <- function(x,theta0=0){dlaplace(x,m=theta0,s=1)}
+  G <- function(x,theta0=0){plaplace(x,m=theta0,s=1)}  
+  Ginv <- function(p){qlaplace(p)}
+}
+if(dist=="Normal"){
+  g <- function(x,theta0=0){dnorm(x,theta0,1)}
+  G <- function(x,theta0=0){pnorm(x,theta0,1)}
+  Ginv <- function(p){qnorm(p)}  # make precise by always considering small p as opposed to large  
+}
+if(dist=="t3"){
+  g <- function(x,theta0=0){dt(x,3)}
+  G <- function(x,theta0=0){pt(x,3)}  
+  Ginv <- function(p){qt(p,3)}
+}
+if(dist=="t5"){
+  g <- function(x,theta0=0){dt(x,5)}
+  G <- function(x,theta0=0){pt(x,5)}  
+  Ginv <- function(p){qt(p,5)}
+}
+if(dist=="Cauchy"){
+  g <- function(x,theta0=0){dcauchy(x,theta0,1)}
+  G <- function(x,theta0=0){pcauchy(x,theta0,1)}  
+  Ginv <- function(p){qcauchy(p)}
+}
 
 # R functions
 R1f <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha/2 - (1-w)/(2*w)*alpha*g(x)-((1-alpha)/2)*(G(lambda-x)-G(-lambda-x)))))}
