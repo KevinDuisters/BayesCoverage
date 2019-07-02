@@ -9,8 +9,7 @@
 
 coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)){
   
-  #xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
-  xgrid <- seq(min(thetaseq)-30,max(thetaseq)+30,0.01)
+  xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
   
   for(i in 1:length(xgrid)){
@@ -35,14 +34,6 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
   if(dist=="t5"){G <- function(x){pt(x,5)} }
   if(dist=="Cauchy"){G <- function(x,theta0=0){pcauchy(x,theta0,1)} }
   
-  #plot(thetaseq,(1-alpha)/2*G(lambda-XL.inf),ylim=c(0,alpha/2))
-  #lines(thetaseq,alpha*G(lambda-XU.sup),col="red")
-  #abline(h=(1-alpha)/2*G(Ginv(alpha/(1+alpha))),lty=2,col="green")
-  #abline(h=(1-alpha)/2*G(3*Ginv(alpha/(1+alpha))),lty=2,col="blue")
-  #abline(h=(1-alpha)/2*G(Ginv(alpha/(1+alpha)) + Ginv(2*alpha/(2+alpha))),lty=2)
-  #abline(h=alpha^2/(2+alpha),lty=2,col="red")
-  
-  
   C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
   C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
   
@@ -56,7 +47,6 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
       polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
       if(lambda==0.75 & w==1 & dist=="Normal"){segments(x0=3.41,x1=3.41,y0=0.952,y1=0.956,col="grey90",lwd=1.5)}# manual tweak to make top-left plot Normal look nicer, be careful generalizing this
       text(x=rep(lambda+9,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
-      
       
       for(r in 5:1){
           reg <- (sapply(XU.sup,function(x) regimeU[which(xgrid==x)])==r) # inf
