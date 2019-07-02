@@ -8,117 +8,85 @@
 library(rmutil)
 #----------------------------------------------------------------------------------------------------------------------------#
 # settings
-lambda <-  0.75
-alphaseq <- seq(0.01,0.5,0.01)
-x <- seq(lambda,lambda+20,0.05)    # X_{II} \cap (\lambda,\infty)
-#wseq <- seq(0.01,1,0.005)
-wseq <- seq(0.5,1,0.005)
+h <- 0.001
+alphaseq <- seq(0,1-h,h)
+wseq <- c(alphaseq,1)
+#wseq <- seq(0.5,1,0.0005)
+
+densities <- c("N(0,1)","t10","t5","t3","t2","Lap(0,1)","Cauchy(0,1)")
+cols <- c("black","navy","blue","deepskyblue","cyan","red","magenta")
+ltys <- c(6,1,1,1,1,3,5)
+ld <- length(densities)
 
 #----------------------------------------------------------------------------------------------------------------------------#
 # result
 mat <- matrix(NA,length(alphaseq),length(wseq))
 rownames(mat) <- alphaseq
 colnames(mat) <- wseq
-result <-tail<- lapply(1:7,function(l) mat)
+tail<- lapply(1:ld,function(l) mat)
 
 #----------------------------------------------------------------------------------------------------------------------------#
 # loop
-for(d in 1:7){
-
-  if(d==1){
-    g <- function(x){dnorm(x,0,1)}
+for(d in 1:ld){
+dens <- densities[d]
+  
+if(dens=="N(0,1)"){
+    #g <- function(x){dnorm(x,0,1)}
     G <- function(x){pnorm(x,0,1)}
     Ginv <- function(p){qnorm(p,0,1)}
   }
- 
-  if(d==2){
-    g <- function(x){dlaplace(x)}
-    G <- function(x){plaplace(x)}
-    Ginv <- function(p){qlaplace(p)}
-  }
-  if(d==3){
-    g <- function(x){dt(x,10)}
+  if(dens=="t10"){
+    #g <- function(x){dt(x,10)}
     G <- function(x){pt(x,10)}
     Ginv <- function(p){qt(p,10)}
   }
-  if(d==4){
-    g <- function(x){dt(x,5)}
+  if(dens=="t5"){
+    #g <- function(x){dt(x,5)}
     G <- function(x){pt(x,5)}
     Ginv <- function(p){qt(p,5)}
   }
-  if(d==5){
-    g <- function(x){dt(x,3)}
+  if(dens=="t3"){
+    #g <- function(x){dt(x,3)}
     G <- function(x){pt(x,3)}
     Ginv <- function(p){qt(p,3)}
   }
-  if(d==6){
-    g <- function(x){dt(x,2)}
+  if(dens=="t2"){
+    #g <- function(x){dt(x,2)}
     G <- function(x){pt(x,2)}
     Ginv <- function(p){qt(p,2)}
   }
-  if(d==7){
-    g <- function(x){dcauchy(x)}
+  if(dens=="Lap(0,1)"){
+    #g <- function(x){dlaplace(x)}
+    G <- function(x){plaplace(x)}
+    Ginv <- function(p){qlaplace(p)}
+  }
+  if(dens=="Cauchy(0,1)"){
+    #g <- function(x){dcauchy(x)}
     G <- function(x){pcauchy(x)}
     Ginv <- function(p){qcauchy(p)}
   }
   
-  R1 <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha/2 - (1-w)/(2*w)*alpha*g(x)-((1-alpha)/2)*(G(lambda-x)-G(-lambda-x)))))}
-  R2 <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha - (1-w)/w*alpha*g(x)+alpha*(G(lambda-x)-G(-lambda-x)) + G(-lambda-x))))}
-  R3 <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha/2 - (1-w)/(2*w)*alpha*g(x)+(alpha/2)*(G(lambda-x)-G(-lambda-x)))))}
-  
-  
-  for(j in 1:length(wseq)){
-  w <- wseq[j]
-  for(i in 1:length(alphaseq)){
-    alpha <- alphaseq[i]
-    
-    R1vec <- R2vec <- R3vec <- targetvec <-numeric(length(x))
-    target <- (w/alpha)*((1-alpha)/(1-w))
-    R1vec <- R1(x,alpha,w,lambda)
-    R2vec <- R2(x,alpha,w,lambda)
-    R3vec <- R3(x,alpha,w,lambda)
-  
-    # check if x in X_{II} \cap (\lambda,\infty) (otherwise no target has to be satisfied)
-    region <- ((-lambda + R3vec < x)  & (x < lambda + R1vec) & (x > lambda))
-    result[[d]][i,j]<-(sum((g(x[region]))/G(-lambda-x[region]) < target) == sum(region))
-    #result[[d]][i,j]<-(sum((g(x[region]))/(G(lambda-x[region])-G(-lambda-x[region])) < (w/(1-w))   ) == sum(region))
-    
-    
-    # tail decay condition 
-    #q <- Ginv(alpha/(1+alpha)) + Ginv(alpha/((2-w)*alpha+w  ))
-    #tail[[d]][i,j]<-((G(q)/G(q/3)) < (2*alpha)/(1-alpha))
-    
-    # new tail decay
-    #xstar <- max(x[region])
-    #q <- min(1,((2*alpha)/(2+alpha))*(1 + (1-w)/w*g(xstar)))
-    #tail[[d]][i,j]<-(G(2*Ginv(q)) < alpha/(1-alpha)*q)
-    #tail[[d]][i,j] <- (G(3*Ginv((alpha/(1+alpha))*(1+(1-w)/w*g(xstar)))) < alpha/(1-alpha)*q)
-    tail[[d]][i,j] <- (G(2*Ginv(alpha/w))<(2*alpha^2)/(1-alpha^2))
+for(i in 1:length(alphaseq)){  
+  alpha <- alphaseq[i]
+  for(j in (i+1):length(wseq)){
+      w <- wseq[j]
+        tail[[d]][i,j] <- (G(2*Ginv(alpha/w))<(2*alpha^2)/(1-alpha^2))
+      }
   }
 }
-}
-
-# assumption
-plot(0,0,xlim=range(wseq),ylim=range(alphaseq),ylab="alpha",xlab="w",type="n")
-title("g(x)/G(-lambda-x) < (w/alpha)*(1-alpha)/(1-w) for x in X_II")
-mtext(paste("lambda =",lambda))
-
-for(d in 1:7){
-alphaline <- apply(result[[d]],2,function(c)alphaseq[min(which(c==F))])
-lines(smooth.spline(wseq[is.na(alphaline)==F],alphaline[is.na(alphaline)==F]),col=d)
-}
-legend("topleft",c("N(0,1)","Lap(0,1)","t10","t5","t3","t2","Cauchy"),lty=rep(1,7),col=1:7,bty="n")
-abline(h=c(0,0.05,0.1),lty=3)
-
 
 # tail decay
-plot(0,0,xlim=range(wseq),ylim=range(alphaseq),ylab="alpha",xlab="w",type="n")
-title("tail decay")
-mtext("does not depend on lambda")
+pdf("Figures/figtail.pdf",width=9,height=9)
+plot(0,0,xlim=range(wseq),ylim=range(alphaseq),ylab="alpha",xlab="w",type="n",asp=1)
+polygon(x=c(-2,2,-2,-2),y=c(-2,2,2,-2),col="lightgrey",border="white")
+abline(h=seq(0,1,0.1),lty=2,col="lightgrey")
+abline(v=seq(0,1,0.1),lty=2,col="lightgrey")
+for(a in seq(0,1,0.1)){segments(x0=-1,x1=a,y0=a,y1=a,lty=2,col="white")}
+box()
 for(d in 1:7){
   alphaline <- apply(tail[[d]],2,function(c)alphaseq[min(which(c==T))])
-  #lines(wseq,alphaline,col=d)
-  lines(smooth.spline(wseq[is.na(alphaline)==F],alphaline[is.na(alphaline)==F]),col=d)
+  lines(wseq,alphaline,lty=ltys[d],col=cols[d],lwd=2)
 }
-legend("topleft",c("N(0,1)","Lap(0,1)","t10","t5","t3","t2","Cauchy"),lty=rep(1,7),col=1:7,bty="n")
-abline(h=c(0,0.05,0.1),lty=3)
+#legend("topleft",densities[ld:1],lty=ltys[ld:1],col=cols[ld:1],lwd=rep(2,ld),bg="white")
+legend(x=0,y=1,densities[ld:1],lty=ltys[ld:1],col=cols[ld:1],lwd=rep(2,ld),bg="white")
+dev.off()
