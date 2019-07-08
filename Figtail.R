@@ -9,13 +9,13 @@ library(rmutil)
 #----------------------------------------------------------------------------------------------------------------------------#
 # settings
 h <- 0.001
-alphaseq <- seq(0,1-h,h)
+alphaseq <- seq(0,1,h)
 wseq <- c(alphaseq,1)
 #wseq <- seq(0.5,1,0.0005)
 
 densities <- c("N(0,1)","t10","t5","t3","t2","Lap(0,1)","Cauchy(0,1)")
 cols <- c("black","navy","blue","deepskyblue","cyan","red","magenta")
-ltys <- c(6,1,1,1,1,3,5)
+ltys <- c(4,1,1,1,1,3,5)
 ld <- length(densities)
 
 #----------------------------------------------------------------------------------------------------------------------------#
@@ -66,11 +66,11 @@ if(dens=="N(0,1)"){
     Ginv <- function(p){qcauchy(p)}
   }
   
-for(i in 1:length(alphaseq)){  
+for(i in 1:(length(alphaseq)-1)){  
   alpha <- alphaseq[i]
   for(j in (i+1):length(wseq)){
       w <- wseq[j]
-        tail[[d]][i,j] <- (G(2*Ginv(alpha/w))<(2*alpha^2)/(1-alpha^2))
+      tail[[d]][i,j] <- (G(2*Ginv(alpha/w))<(2*alpha^2)/(1-alpha^2))
       }
   }
 }
@@ -87,6 +87,5 @@ for(d in 1:7){
   alphaline <- apply(tail[[d]],2,function(c)alphaseq[min(which(c==T))])
   lines(wseq,alphaline,lty=ltys[d],col=cols[d],lwd=2)
 }
-#legend("topleft",densities[ld:1],lty=ltys[ld:1],col=cols[ld:1],lwd=rep(2,ld),bg="white")
 legend(x=0,y=1,densities[ld:1],lty=ltys[ld:1],col=cols[ld:1],lwd=rep(2,ld),bg="white")
 dev.off()
