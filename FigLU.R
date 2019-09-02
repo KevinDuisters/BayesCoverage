@@ -16,8 +16,8 @@ source("functions/getU.R")
 dist <- "t3"
 lambda<-7.5
 alpha <- 0.05
-w <- 1
-#w<-0.9
+#w <- 1
+w<-0.2
 
 
 #xgrid <- seq(-lambda-15,lambda+15,0.01)
@@ -76,6 +76,8 @@ points(y=c(-lambda,lambda,-lambda,lambda),x=c(max(xgrid[regimeU==4]),min(xgrid[r
 if(w < 1){points(y=c(-lambda,0,0,lambda),x=c(min(xgrid[regimeU==3]),min(xgrid[regimeU==3]),max(xgrid[regimeL==3]),max(xgrid[regimeL==3])),
         col=c("black","blue","black","blue"),pch=rep(21,4),bg=c("black","white","black","white")) # discontinuity jump at lambda
 }
+
+abline(v=c(lambda))
 
 # Right
 plot(theta0seq,xU.sup,type="n",xlim=ranges,ylim=ranges,ylab=expression(paste(X^U,(theta[0])," and ",{X^L}(theta[0]))),col="black",xlab=expression(theta[0]),asp=1)
