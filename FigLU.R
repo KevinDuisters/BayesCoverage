@@ -14,6 +14,7 @@ source("functions/getU.R")
 # Fig 2: Visualize L,U and inverse xL, xU 
 #dist <- "Lap"
 dist <- "t3"
+#dist <- "Normal"
 lambda<-7.5
 alpha <- 0.05
 w <- 1
