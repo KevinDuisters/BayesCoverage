@@ -2,7 +2,7 @@
 # On frequentist coverage of Bayesian credible sets for estimation of the mean under constraints
 # Duisters & Schmidt-Hieber
 # Math Institute, Leiden University
-# Oct 2018
+# Oct 2019
 #--------------------------------------------------------------------------------------------------------------------#
 #--------------------------------------------------------------------------------------------------------------------#
 # source functions
@@ -12,8 +12,8 @@ source("functions/getU.R")
 # Plots
 #--------------------------------------------------------------------------------------------------------------------#
 # Fig 2: Visualize L,U and inverse xL, xU 
-#dist <- "Lap"
-dist <- "t3"
+dist <- "Lap"
+#dist <- "t3"
 #dist <- "Normal"
 lambda<-7.5
 alpha <- 0.05
@@ -21,8 +21,7 @@ w <- 1
 #w<-0.2
 
 
-#xgrid <- seq(-lambda-15,lambda+15,0.01)
-xgrid <- seq(-lambda-25,lambda+25,0.01)
+xgrid <- seq(-lambda-15,lambda+15,0.01)
 Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
 
 for(i in 1:length(xgrid)){

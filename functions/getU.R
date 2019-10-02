@@ -65,7 +65,7 @@ getU <- function(x,alpha,lambda,w,dist){
   
   if(Pi0x >= 1 - alpha){# point mass assumes entire credible set already 
     U <- 0
-    regime <- 3 # proxy
+    regime <- 0
   }else{
     if(x + R3 > lambda){ # U > lambda; 
       if(x - R1 > lambda){# L(x) > lambda
