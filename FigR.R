@@ -128,33 +128,40 @@ for(lambda in lambdas){
 # ---------------------------------------------------------------------------------------- #
 # Lebesgue measure HPD credible set
 
+# t_alpha (when HPD is not only zero)
+feas <- function(x){((w/(1-w))*(G(x - lambda) + G(-lambda - x))/g(x)) > alpha/(1-alpha)}
+
 
 alpha <- 0.05
 lambdas <- c(0.75,7.5)
 w <- 1
-#w<-0.2
+w<-0.2
 
-pdf("Figures/figsize.pdf",width=9)
+#pdf("Figures/figsize.pdf",width=9)
+pdf("Figures/figsizeSI.pdf",width=9) #w=0.2
 
 xgrid <- seq(-15,15,0.01)
 par(mfrow=c(1,length(lambdas)),pty="s")
 for(lambda in lambdas){
-  plot(xgrid,xgrid,type="n",xlab="x",ylab=expression(paste("Lebesgue measure of ",HPD[alpha])),ylim=c(-15,15),asp=1)
+  plot(xgrid,xgrid,type="n",xlab="x",ylab=expression(nu(x)),ylim=c(-15,15),asp=1) #expression(paste("Lebesgue measure of ",HPD[alpha]))
   
-  x1 <- xgrid[xgrid > lambda + R1f(xgrid,alpha,w,lambda)]
+  x1 <- xgrid[(xgrid > lambda + R1f(xgrid,alpha,w,lambda))]
   x2 <- xgrid[(xgrid > 0) & (-lambda + R3f(xgrid,alpha,w,lambda) < xgrid) & (xgrid <= lambda + R1f(xgrid,alpha,w,lambda))  ]
-  x3 <- xgrid[abs(xgrid) <= -lambda + R3f(xgrid,alpha,w,lambda)]
+  x3 <- xgrid[(abs(xgrid) <= -lambda + R3f(xgrid,alpha,w,lambda))]
   x4 <- (-x2)
-  x5 <- xgrid[-xgrid > lambda + R1f(xgrid,alpha,w,lambda)]
+  x5 <- xgrid[(-xgrid > lambda + R1f(xgrid,alpha,w,lambda))]
   
-  lines(x1,2*R1f(x1,alpha,w,lambda)) # black
-  lines(x2,x2+R2f(x2,alpha,w,lambda)-lambda,col="black") #green
-  lines(x3,2*R3f(x3,alpha,w,lambda)-2*lambda,col="black") # blue
-  lines(x4,-x4+R2f(-x4,alpha,w,lambda)-lambda,col="black") # red
-  lines(x5,2*R1f(x5,alpha,w,lambda)) # black
-  
-  abline(v=c(max(x5),min(x3),max(x3),min(x1)),lty=3)
-  mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
+  lines(x1[feas(x1)],2*R1f(x1[feas(x1)],alpha,w,lambda),col="blue") # black
+  lines(x2[feas(x2)],x2[feas(x2)]+R2f(x2[feas(x2)],alpha,w,lambda)-lambda,col="blue") #green
+  lines(x3[feas(x3)],2*R3f(x3[feas(x3)],alpha,w,lambda)-2*lambda,col="blue") # blue
+  lines(x4[feas(x4)],-x4[feas(x4)]+R2f(-x4[feas(x4)],alpha,w,lambda)-lambda,col="blue") # red
+  lines(x5[feas(x5)],2*R1f(x5[feas(x5)],alpha,w,lambda),col="blue") # black
+ 
+  lapply(list(x1,x2,x3,x4,x5),function(x)lines(x[feas(x)==F],rep(0,sum(feas(x)==F)),col="blue")) # draw zero size for HPD(x)={0}.
+   
+  abline(v=c(max(x5),max(x4),min(x2),min(x1)),lty=3)
+  #mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
+  mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+max(x4))/2,(max(x4)+min(x2))/2,(min(x2)+min(x1))/2,(min(x1)+max(xgrid))/2))
   
 }
 
