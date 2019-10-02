@@ -10,13 +10,13 @@ library(rmutil)
 #----------------------------------------------------------------------------------------------------------------------------#
 # settings
 h <- 0.001
-alphaseq <- seq(0,1,h)
+alphaseq <- seq(h,1-h,h)
 #wseq <- c(alphaseq,1)
 wseq <- seq(0,1,h)
 
 lambda1 <- 0.75
 densities <- c("N(0,1)","Lap(0,1)","t10","t5","t3","t2","Cauchy(0,1)")
-cols <- c("black","navy","darkgreen","chartreuse4","aquamarine3","green","red")
+cols <- c("black","blue","darkgreen","chartreuse4","aquamarine3","green","red")
 ltys <- c(5,1,3,3,3,3,4)
 ld <- length(densities)
 

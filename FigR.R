@@ -70,11 +70,13 @@ for(lambda in lambdas){
   x4 <- (-x2)
   x5 <- xgrid[-xgrid > lambda + R1]
   
-  abline(v=c(max(x5),min(x3),max(x3),min(x1)),lty=3)
-  mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
+  #abline(v=c(max(x5),min(x3),max(x3),min(x1)),lty=3)
+  #mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
+  abline(v=c(max(x5),max(x4),min(x2),min(x1)),lty=3)
+  mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+max(x4))/2,(max(x4)+min(x2))/2,(min(x2)+min(x1))/2,(min(x1)+max(xgrid))/2))
   
   lines(xgrid,R1,lty=2)
-  lines(xgrid,R2,col="green",lty=2)
+  lines(xgrid,R2,col="red",lty=2)
   lines(xgrid,R2f(-xgrid,alpha,w,lambda),col="red",lty=2)
   lines(xgrid,R3,col="blue",lty=2)
   
@@ -86,13 +88,13 @@ for(lambda in lambdas){
   
   
   lines(x1,R1f(x1,alpha,w,lambda),lty=1)
-  lines(x2,R2f(x2,alpha,w,lambda),col="green",lty=1)
+  lines(x2,R2f(x2,alpha,w,lambda),col="red",lty=1)
   lines(x3,R3f(x3,alpha,w,lambda),col="blue",lty=1)
   lines(x4,R2f(-x4,alpha,w,lambda),col="red",lty=1)
   lines(x5,R1f(x5,alpha,w,lambda),lty=1)
   
-  legend("topleft",c(expression(R[1](x)),expression(R[2](-x)),expression(R[2](x)),expression(R[3](x))),
-         lty=c(1,1,1,1),col=c(1,"red","green","blue"),bty="n",seg.len=2)
+  #legend("topleft",c(expression(R[1](x)),expression(paste(R[2](-x),",",R[2](x))),expression(R[3](x))),lty=c(1,1,1),col=c(1,"red","blue"),bg="white",box.col="white",seg.len=2)
+  
 }
 
 dev.off()
@@ -114,8 +116,10 @@ for(lambda in lambdas){
   x3 <- xgrid[abs(xgrid) <= -lambda + R3f(xgrid,alpha,w,lambda)]
   
   abline(h=c(-lambda,lambda),lty=3)
-  abline(v=c(max(x5),min(x3),max(x3),min(x1)),lty=3)
-  mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
+  #abline(v=c(max(x5),min(x3),max(x3),min(x1)),lty=3)
+  #mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
+  abline(v=c(max(x5),max(x4),min(x2),min(x1)),lty=3)
+  mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+max(x4))/2,(max(x4)+min(x2))/2,(min(x2)+min(x1))/2,(min(x1)+max(xgrid))/2))
   
   
   if(length(x1)>0){lines(x1,x1+R1f(x1,alpha,w,lambda),lty=1)}
@@ -160,7 +164,6 @@ for(lambda in lambdas){
   lapply(list(x1,x2,x3,x4,x5),function(x)lines(x[feas(x)==F],rep(0,sum(feas(x)==F)),col="blue")) # draw zero size for HPD(x)={0}.
    
   abline(v=c(max(x5),max(x4),min(x2),min(x1)),lty=3)
-  #mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+min(x3))/2,(min(x3)+max(x3))/2,(max(x3)+min(x1))/2,(min(x1)+max(xgrid))/2))
   mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(xgrid)+max(x5))/2,(max(x5)+max(x4))/2,(max(x4)+min(x2))/2,(min(x2)+min(x1))/2,(min(x1)+max(xgrid))/2))
   
 }
