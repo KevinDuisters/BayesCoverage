@@ -143,15 +143,15 @@ for(lambda in lambdas){
 
 alpha <- 0.05
 lambdas <- c(0.75,7.5)
-#w <- 1
-w<-0.2
+w <- 1
+#w<-0.2
 
-#pdf("Figures/figsize.pdf",width=9)
-pdf("Figures/figsizeSI.pdf",width=9) #w=0.2
+pdf("Figures/figsize.pdf",width=9)
+#pdf("Figures/figsizeSI.pdf",width=9) #w=0.2
 
 par(mfrow=c(1,length(lambdas)),pty="s")
 for(lambda in lambdas){
-  plot(xgrid,xgrid,type="n",xlab="x",ylab=expression(nu(x)),ylim=c(0,2*max(ranges))) # remark this is asp=1
+  plot(xgrid,xgrid,type="n",xlab="x",ylab=expression(nu(x)),ylim=c(0,10))
   #polygon(x=c(-100,100,100,-100,-100),y=c(-100,-100,0,0,-100),col="lightgrey")
   #box()
 
@@ -185,4 +185,6 @@ for(lambda in lambdas){
 }
 
 dev.off()
+
+# ---------------------------------------------------------------------------------------- #
 
