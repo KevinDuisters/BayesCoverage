@@ -38,11 +38,12 @@ if(dist=="t3"){
 # set parameters
 lambda<-7.5
 alpha <- 0.05
-#w <- 1
-w<-0.2
+w <- 1
+#w<-0.2
 #--------------------------------------------------------------------------------------------------------------------#
 # get results
-xgrid <- seq(-15-lambda,15+lambda,0.01)
+h <- 0.01
+xgrid <- seq(-20-lambda,20+lambda,h)
 Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
 
 for(i in 1:length(xgrid)){
@@ -56,17 +57,18 @@ for(i in 1:length(xgrid)){
   regimeL[i] <- out.L$regime
 }
 
-#theta0seq <- c(seq(-lambda-10,-lambda-0.01,0.01),seq(lambda+0.01,lambda+10,0.01))
-theta0seq <- c(seq(-lambda-20,-lambda-0.01,0.01),seq(lambda+0.01,lambda+20,0.01))
-xU.inf <- sapply(theta0seq,function(theta0){xgrid[min(which(Ugrid>theta0))]})
-xU.sup <- sapply(theta0seq,function(theta0){xgrid[max(which(Ugrid<theta0))]})
-xL.sup <-sapply(theta0seq,function(theta0){xgrid[max(which(Lgrid<theta0))]})
-xL.inf <- sapply(theta0seq,function(theta0){xgrid[min(which(Lgrid>theta0))]})
+
+theta0seq <- c(seq(-lambda-20,-lambda-h,h),seq(lambda+h,lambda+20,h))
+xU.inf <- sapply(theta0seq,function(theta0){xgrid[min(which(Ugrid>=theta0))]})
+xU.sup <- sapply(theta0seq,function(theta0){xgrid[max(which(Ugrid<=theta0))]})
+xL.inf <- sapply(theta0seq,function(theta0){xgrid[min(which(Lgrid>=theta0))]})
+xL.sup <-sapply(theta0seq,function(theta0){xgrid[max(which(Lgrid<=theta0))]})
+
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualize
 
-#pdf("Figures/figLU.pdf",width=9)
-pdf("Figures/figSI1.pdf",width=9)  # w=0.2
+pdf("Figures/figLU.pdf",width=9)
+#pdf("Figures/figSI1.pdf",width=9)  # w=0.2
 
 par(mfrow=c(1,2))
 ranges <- c(-15,15)
@@ -78,10 +80,10 @@ abline(h=c(-lambda,lambda),lty=3,col="grey")
 ta <-max(0,xgrid[((w/(1-w))*(G(xgrid - lambda) + G(-xgrid - lambda))/g(xgrid)) <= (alpha/(1-alpha))])
 
 if(ta==0){ # this is a manual trick, not exact
-  abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3)
+  abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3,col="grey")
   mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])+max(xgrid[regimeU==4]))/2,(max(xgrid[regimeU==4])+min(xgrid[regimeU==2]))/2,(min(xgrid[regimeU==2])+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2))
 }else{
-  abline(v=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3)
+  abline(v=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3,col="grey")
   mtext(c("I","IV","-","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])-ta)/2,(-ta+ta)/2,(ta+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2))
   mtext(c(expression(-t[alpha]),expression(t[alpha])),side=1,at=c(-ta,ta),line=1)
 }
@@ -113,24 +115,31 @@ if(w < 1){
   }
 }
 
-abline(v=c(-lambda,0,lambda))
+
 
 # Right
 plot(theta0seq,xU.sup,type="n",xlim=ranges,ylim=ranges,ylab=expression(paste(X[U],(theta[0])," and ",{X[L]}(theta[0]))),col="black",xlab=expression(theta[0]),asp=1)
-#abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3)
-#mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])+max(xgrid[regimeU==4]))/2,(max(xgrid[regimeU==4])+min(xgrid[regimeU==2]))/2,(min(xgrid[regimeU==2])+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2))
 if(ta==0){ # this is a manual trick, not exact
-  abline(h=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3)
+  abline(h=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3,col="grey")
   mtext(c("I","IV","III","II","I"),side=2,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])+max(xgrid[regimeU==4]))/2,(max(xgrid[regimeU==4])+min(xgrid[regimeU==2]))/2,(min(xgrid[regimeU==2])+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2))
 }else{
-  abline(h=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3)
+  abline(h=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3,col="grey")
   mtext(c("I","IV","-","II","I"),side=2,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])-ta)/2,(-ta+ta)/2,(ta+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2))
   mtext(c(expression(-t[alpha]),expression(t[alpha])),side=2,at=c(-ta,ta),line=1)
 }
-
+abline(v=c(-lambda,lambda),lty=3,col="grey")
+mtext(c(expression(-lambda),expression(lambda)),line=-1.5,side=1,at=c(-lambda,lambda))
 
 polygon(x=c(theta0seq[theta0seq<(-lambda)],sort(theta0seq[theta0seq<(-lambda)],decreasing=T)),y=c(xL.sup[theta0seq<(-lambda)],(xL.inf[theta0seq<(-lambda)])[order(theta0seq[theta0seq<(-lambda)],decreasing=T)]),col="blue",border=NA,density=20)
 polygon(x=c(theta0seq[theta0seq>(lambda)],sort(theta0seq[theta0seq>(lambda)],decreasing=T)),y=c(xU.sup[theta0seq>(lambda)],(xU.inf[theta0seq>(lambda)])[order(theta0seq[theta0seq>(lambda)],decreasing=T)]),col="black",border=NA,density=20)
+
+
+
+
+
+#plot(theta0seq[theta0seq>(lambda)],xU.sup[theta0seq>(lambda)],type="l")
+#lines(theta0seq[theta0seq>(lambda)],xU.inf[theta0seq>(lambda)],type="l",col="red")
+#polygon(c(theta0seq[theta0seq>lambda],rev(theta0seq[theta0seq>lambda])),c(xU.inf[theta0seq>lambda],rev(xU.sup[theta0seq>lambda])))
 
 lines(theta0seq[theta0seq<(-lambda)],xU.sup[theta0seq<(-lambda)])
 lines(theta0seq[theta0seq>(lambda)],xU.sup[theta0seq>(lambda)])
@@ -140,8 +149,6 @@ lines(theta0seq[theta0seq<(-lambda)],xL.sup[theta0seq<(-lambda)],col="blue")
 lines(theta0seq[theta0seq>(lambda)],xL.sup[theta0seq>(lambda)],col="blue")
 lines(theta0seq[theta0seq<(-lambda)],xL.inf[theta0seq<(-lambda)],lty=2,col="blue")
 lines(theta0seq[theta0seq>(lambda)],xL.inf[theta0seq>(lambda)],lty=2,col="blue")
-abline(v=c(-lambda,lambda),lty=3,col="grey")
-mtext(c(expression(-lambda),expression(lambda)),line=-1.5,side=1,at=c(-lambda,lambda))
 
 legend("topleft",c(expression(paste("sup ",X[U])),expression(paste("inf ",X[U])),expression(paste("sup ",X[L])),expression(paste("inf ",X[L]))),
        lty=c(1,2,1,2),col=c("black","black","blue","blue"),ncol=2,bg="white",box.col="white",seg.len=2)
