@@ -15,7 +15,7 @@ source("functions/coverage.R")
 #--------------------------------------------------------------------------------------------------------------------#
 # Plot Coverage
 alpha <- 0.05
-cols <- c("grey","black","red","blue","orange","green")
+cols <- c("black","red","blue","orange","green","grey")
 w <- 1
 # w <- 0.2 # Supplemental
 
