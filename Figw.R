@@ -34,9 +34,10 @@ for(lambda in lambdas){
   for(w in wseq){
   qmat[which(wseq==w),which(lambdas==lambda)] <- qlaplace(min(1-1e-8,alpha/(1+alpha)*(1 + ((1-w)/w)*dlaplace(lambda))))  
   obj <- coverage(thetaseq,alpha,lambda,w,dist,plot.cov=F) 
-  #lines(thetaseq,obj$C.sup,col=cols[0+1]) # detach this for better visual appearance
+  #lines(thetaseq,obj$C.inf,col=cols[0+1],lty=2) # detach this for better visual appearance
   for(r in 5:0){
-  lines(thetaseq[obj$regimeCsup==r],obj$C.inf[obj$regimeCsup==r],col=cols[r+1])
+  #lines(thetaseq[obj$regimeCinf==r],obj$C.inf[obj$regimeCinf==r],col=cols[r+1],lty=2)
+  lines(thetaseq[obj$regimeCsup==r],obj$C.sup[obj$regimeCsup==r],col=cols[r+1])
   }
   
   }
