@@ -77,6 +77,7 @@ nu.x <- sapply(xgrid,function(x){
 
 # plot expected efficiency
 plot(smooth.spline(xgrid,E.cov.grid/nu.x),type="l",ylab="Efficiency",xlab="x",ylim=c(0.1,0.25),col="blue")
+
 plot(smooth.spline(xgrid,nu.x),type="l")
 
 
