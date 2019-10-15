@@ -7,7 +7,7 @@
 #--------------------------------------------------------------------------------------------------------------------#
 # Coverage function
 
-coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)){
+coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+1)){
   
   xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
@@ -37,8 +37,18 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
   C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
   C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
   
+  # coverage regime
+  regimeCinf <- regimeCsup <- numeric(length(thetaseq))
+  for(r in 5:0){
+    reg <- (sapply(XU.sup,function(x) regimeU[which(xgrid==x)])==r) # inf
+    if(sum(reg)>0){regimeCinf[reg] <- r}
+    
+    reg <- (sapply(XU.inf,function(x) regimeU[which(xgrid==x)])==r)# Sup
+    if(sum(reg)>0){regimeCsup[reg] <- r}
+  }
+  
   if(plot.cov == F){
-    return(list(C.inf=C.inf, C.sup=C.sup, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL))
+    return(list(C.inf=C.inf, C.sup=C.sup, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup))
     }else{
       plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
@@ -48,12 +58,12 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5)
       if(lambda==0.75 & w==1 & dist=="Normal"){segments(x0=3.41,x1=3.41,y0=0.952,y1=0.956,col="grey90",lwd=1.5)}# manual tweak to make top-left plot Normal look nicer, be careful generalizing this
       text(x=rep(lambda+16,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
       
-      for(r in 5:1){
-          reg <- (sapply(XU.sup,function(x) regimeU[which(xgrid==x)])==r) # inf
-          if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r],lty=2)}
-          reg <- (sapply(XU.inf,function(x) regimeU[which(xgrid==x)])==r)# Sup
-          if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r])}
-      }
+      for(r in 5:0){
+        reg <- (regimeCinf==r) # inf
+        if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r+1],lty=2)}
+        reg <- (regimeCsup==r) # sup
+        if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r+1])}
+      }   
     }
 }
 
