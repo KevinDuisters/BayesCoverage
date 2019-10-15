@@ -29,8 +29,8 @@ par(mfrow=c(1,length(lambdas)),pty="s")
 for(lambda in lambdas){
   thetaseq <- seq(lambda+h,lambda+18,h)
   plot(thetaseq,thetaseq,type="n",ylim=c(0,1),xlab=expression(theta[0]),ylab=expression(C(theta[0])))
-  abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
-  #text(x=rep(lambda+16,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
+  abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2),lty=rep(3,3),col=rep("grey",3))
+  #text(x=rep(lambda+16,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),cex=0.8,adj=0)
   for(w in wseq){
   qmat[which(wseq==w),which(lambdas==lambda)] <- qlaplace(min(1-1e-8,alpha/(1+alpha)*(1 + ((1-w)/w)*dlaplace(lambda))))  
   obj <- coverage(thetaseq,alpha,lambda,w,dist,plot.cov=F) 
