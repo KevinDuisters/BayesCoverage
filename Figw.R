@@ -22,10 +22,10 @@ h <- 0.005
 wseq <- c(1e-5,1e-4,1e-3,1e-2,0.025,0.05,0.075,0.1,0.2,0.5,1)
 
 pdf("Figures/figw.pdf",width=9)
-par(mfrow=c(1,2))
-
 lambdas <- c(0.75,7.5)
 qmat <- matrix(NA,nrow=length(wseq),ncol=length(lambdas),dimnames=list(rows=wseq,cols=lambdas))
+
+par(mfrow=c(1,length(lambdas)),pty="s")
 for(lambda in lambdas){
   thetaseq <- seq(lambda+h,lambda+18,h)
   plot(thetaseq,thetaseq,type="n",ylim=c(0,1),xlab=expression(theta[0]),ylab=expression(C(theta[0])))
