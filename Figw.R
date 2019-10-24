@@ -19,7 +19,8 @@ alpha <- 0.05
 cols <- c("grey","black","red","blue","orange","green")
 h <- 0.005
 
-wseq <- c(1e-5,1e-4,1e-3,1e-2,0.025,0.05,0.075,0.1,0.2,0.5,1)
+#wseq <- c(1e-5,1e-4,1e-3,1e-2,0.025,0.05,0.075,0.1,0.2,0.5,1)
+wseq <- c(0.2,0.5,1)
 
 pdf("Figures/figw.pdf",width=9)
 lambdas <- c(0.75,7.5)
@@ -35,6 +36,7 @@ for(lambda in lambdas){
   qmat[which(wseq==w),which(lambdas==lambda)] <- qlaplace(min(1-1e-8,alpha/(1+alpha)*(1 + ((1-w)/w)*dlaplace(lambda))))  
   obj <- coverage(thetaseq,alpha,lambda,w,dist,plot.cov=F) 
   #lines(thetaseq,obj$C.inf,col=cols[0+1],lty=2) # detach this for better visual appearance
+  lines(thetaseq,obj$C.sup,col=cols[0+1]) # detach this for better visual appearance
   for(r in 5:0){
   #lines(thetaseq[obj$regimeCinf==r],obj$C.inf[obj$regimeCinf==r],col=cols[r+1],lty=2)
   lines(thetaseq[obj$regimeCsup==r],obj$C.sup[obj$regimeCsup==r],col=cols[r+1])
