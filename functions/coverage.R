@@ -37,6 +37,13 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
   C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
   
+  # numeric proxy for frequentist coverage
+  C.num <- sapply(thetaseq,function(theta0){
+              Xcov <- xgrid[which(Ugrid >= theta0 & Lgrid <- theta0)]
+              return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))
+              })  
+  
+  
   # coverage regime
   regimeCinf <- regimeCsup <- numeric(length(thetaseq))
   for(r in 5:0){
@@ -48,7 +55,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   }
   
   if(plot.cov == F){
-    return(list(C.inf=C.inf, C.sup=C.sup, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup))
+    return(list(C.inf=C.inf, C.sup=C.sup, C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup))
     }else{
       plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
@@ -63,7 +70,8 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
         if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r+1],lty=2)}
         reg <- (regimeCsup==r) # sup
         if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r+1])}
-      }   
+      }
+      points(thetaseq,C.num,pch=1,col='green')
     }
 }
 

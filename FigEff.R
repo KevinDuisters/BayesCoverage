@@ -44,6 +44,8 @@ E.nu.seq <- sapply(thetaseq,function(theta){
   )
 
 # plot efficiency
+plot(smooth.spline(thetaseq,E.nu.seq),type="l",ylab="Expected length",xlab=expression(theta[0]),xlim=c(0,10))
+
 plot(smooth.spline(thetaseq,Cseq$C.sup/E.nu.seq),type="l",ylab="Efficiency",xlab=expression(theta[0]),
      ylim=c(0.1,0.25),xlim=c(0,10))
 
