@@ -24,16 +24,11 @@ w <- 1
 if(w==1){pdf("Figures/figcov.pdf",width=9)}else{pdf("Figures/SFcov.pdf",width=9)}
 par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 
-#lambdas <- c(0.75,7.5)
-lambdas <- 7.5
+lambdas <- c(0.75,7.5)
 for(lambda in lambdas){
-  thetaseq <- seq(lambda+0.005,lambda+18,0.0025)
+  thetaseq <- seq(lambda+0.005,lambda+18,0.005)
   coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T,cols) 
   coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T,cols) 
-  
-  # check for continuity with points 
-  #coverage(thetaseq=seq(lambda+0.005,lambda+18,0.0025),alpha,lambda,w,dist="Normal",plot.cov=T,cols) 
-  #coverage(thetaseq = c(seq(lambda+0.005,lambda+2.95,0.0025),seq(lambda+2.95,lambda+3.05,1e-6),seq(lambda+3.05,lambda+18,0.0025)),alpha,lambda,w,dist="Lap",plot.cov=T,cols)
 }
 
 dev.off()
@@ -42,7 +37,8 @@ dev.off()
 if(w==1){pdf("Figures/figcovbottom.pdf",width=9)}else{pdf("Figures/SFcovbottom.pdf",width=9)}
 par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 
-lambdas <- c(0.75,7.5)
+#lambdas <- c(0.75,7.5)
+lambdas <- c(10,15)
 for(lambda in lambdas){
   thetaseq <- seq(lambda+0.005,lambda+18,0.005)
   coverage(thetaseq,alpha,lambda,w,dist="t3",plot.cov=T,cols) 
