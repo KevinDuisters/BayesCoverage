@@ -67,14 +67,12 @@ xL.sup <-sapply(theta0seq,function(theta0){xgrid[max(which(Lgrid<=theta0))]})
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualize
 
-pdf("Figures/figLU.pdf",width=9)
-#pdf("Figures/figSI1.pdf",width=9)  # w=0.2
-
+if(w==1){pdf("Figures/figLU.pdf",width=9)}else{pdf("Figures/figSI1.pdf",width=9)}  # w=0.2}
 
 right <- F # excluded inversion figures (December '19)
 if(right==T){par(mfrow=c(1,2))}else{par(mfrow=c(1,1))}
 
-ranges <- c(-12,12)
+ranges <- c(-15,15)
 
 # Left
 plot(xgrid,xgrid,ylab=expression(paste(L[alpha](x)," and ",U[alpha](x))),xlab=expression(x),type="n",xlim=ranges,ylim=ranges,asp=1)
