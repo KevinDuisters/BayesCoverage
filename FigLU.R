@@ -36,7 +36,7 @@ if(dist=="t3"){
 }
 #--------------------------------------------------------------------------------------------------------------------#
 # set parameters
-lambda<-7.5
+lambda<-5
 alpha <- 0.05
 w <- 1
 #w<-0.2
@@ -70,9 +70,11 @@ xL.sup <-sapply(theta0seq,function(theta0){xgrid[max(which(Lgrid<=theta0))]})
 pdf("Figures/figLU.pdf",width=9)
 #pdf("Figures/figSI1.pdf",width=9)  # w=0.2
 
-par(mfrow=c(1,2))
-ranges <- c(-15,15)
 
+right <- F # excluded inversion figures (December '19)
+if(right==T){par(mfrow=c(1,2))}else{par(mfrow=c(1,1))}
+
+ranges <- c(-12,12)
 
 # Left
 plot(xgrid,xgrid,ylab=expression(paste(L[alpha](x)," and ",U[alpha](x))),xlab=expression(x),type="n",xlim=ranges,ylim=ranges,asp=1)
@@ -116,6 +118,7 @@ if(w < 1){
 }
 
 
+if(right==T){
 
 # Right
 plot(theta0seq,xU.sup,type="n",xlim=ranges,ylim=ranges,ylab=expression(paste(X[U],(theta[0])," and ",{X[L]}(theta[0]))),col="black",xlab=expression(theta[0]),asp=1)
@@ -176,7 +179,7 @@ if(w < 1){
   }
 }
 
-
+} # end if right==T
 
 dev.off()
 
