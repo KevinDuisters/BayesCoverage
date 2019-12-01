@@ -37,7 +37,8 @@ dev.off()
 if(w==1){pdf("Figures/figcovbottom.pdf",width=9)}else{pdf("Figures/SFcovbottom.pdf",width=9)}
 par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 
-lambdas <- c(0.75,7.5)
+#lambdas <- c(0.75,7.5)
+lambdas <- c(1.5,2)
 for(lambda in lambdas){
   thetaseq <- seq(lambda+0.005,lambda+18,0.005)
   coverage(thetaseq,alpha,lambda,w,dist="t3",plot.cov=T,cols) 
