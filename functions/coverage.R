@@ -59,20 +59,20 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
     theta0 <- thetaseq[t]
     xstar <- XU.sup[t]
     xtilde <- XU.inf[t]
-    xL <- XL.inf[t]
+    xbar <- XL.inf[t]
     xhat <- XL.sup[t]
     
     # C.inf
     if(abs(xstar) <= ta){
-      if(xL > ta){C.inf[t] <- G(xL - theta0) - G(ta-theta0)}
-      if(xL < (-ta)){C.inf[t] <- G(xL - theta0) - G(-ta-theta0)}
-      if(abs(xL) < ta){C.inf[t] <- 0}
+      if(xbar > ta){C.inf[t] <- G(xbar - theta0) - G(ta-theta0)}
+      if(xbar < (-ta)){C.inf[t] <- G(xbar - theta0) - G(-ta-theta0)}
+      if(abs(xbar) < ta){C.inf[t] <- 0}
     }else{
-      if(xstar > ta){C.inf[t] <- G(xL - theta0) - G(xstar-theta0)}else{
+      if(xstar > ta){C.inf[t] <- G(xbar - theta0) - G(xstar-theta0)}else{
       if(xstar < (-ta)){
-        if(xL > ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0) + G(xL - theta0) - G(ta - theta0)}
-        if(xL < (-ta)){C.inf[t] <- G(xL - theta0) - G(xstar-theta0)}
-        if(abs(xL) < ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0)}
+        if(xbar > ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0) + G(xbar - theta0) - G(ta - theta0)}
+        if(xbar < (-ta)){C.inf[t] <- G(xbar - theta0) - G(xstar-theta0)}
+        if(abs(xbar) < ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0)}
       }
       }
     }
