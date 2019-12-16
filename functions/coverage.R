@@ -56,7 +56,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   
   # Addition Dec 2019: P_{theta_0}(|X| > t_{alpha}) adjustment for C.inf and C.sup:  numeric proxy 
   prob <- sapply(thetaseq,function(theta0){
-          Xprob <- xgrid[regimeU==0]
+          Xprob <- xgrid[regimeU!=0]
           return(sum(g(Xprob - theta0))/sum(g(xgrid-theta0)))
   }
     )
@@ -93,9 +93,9 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
       
       for(r in 5:0){
         reg <- (regimeCinf==r) # inf
-        if(sum(reg)>0){lines(thetaseq[reg],prob*C.inf[reg],col=cols[r+1],lty=2)}
+        if(sum(reg)>0){lines(thetaseq[reg],(prob*C.inf)[reg],col=cols[r+1],lty=2)}
         reg <- (regimeCsup==r) # sup
-        if(sum(reg)>0){lines(thetaseq[reg],prob*C.sup[reg],col= cols[r+1],lty=2)}
+        if(sum(reg)>0){lines(thetaseq[reg],(prob*C.sup)[reg],col= cols[r+1],lty=2)}
       }
       
       
