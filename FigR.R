@@ -142,7 +142,7 @@ for(lambda in lambdas){
 # Lebesgue measure HPD credible set
 
 alpha <- 0.05
-lambdas <- c(0.75,7.5)
+lambdas <- c(0.5, 5)
 w <- 1
 #w<-0.2
 
