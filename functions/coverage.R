@@ -48,13 +48,50 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
   C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
   
-  
+  ## The following adjustment is theoretically correct but I haven't seen practical differences for my choices of g,alpha,w,lambda
   # t alpha adjustment
-  ta <- -1
+  ta <- -1e8
   if(2*G(-lambda) <= ((1-w)/w)*(alpha/(1-alpha))*g(0)){
   ta <-max(0,xgrid[((w/(1-w))*(G(xgrid - lambda) + G(-xgrid - lambda))/g(xgrid)) <= (alpha/(1-alpha))])
   }
   
+  for(t in 1:length(thetaseq)){
+    theta0 <- thetaseq[t]
+    xstar <- XU.sup[t]
+    xtilde <- XU.inf[t]
+    xL <- XL.inf[t]
+    xhat <- XL.sup[t]
+    
+    # C.inf
+    if(abs(xstar) <= ta){
+      if(xL > ta){C.inf[t] <- G(xL - theta0) - G(ta-theta0)}
+      if(xL < (-ta)){C.inf[t] <- G(xL - theta0) - G(-ta-theta0)}
+      if(abs(xL) < ta){C.inf[t] <- 0}
+    }else{
+      if(xstar > ta){C.inf[t] <- G(xL - theta0) - G(xstar-theta0)}else{
+      if(xstar < (-ta)){
+        if(xL > ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0) + G(xL - theta0) - G(ta - theta0)}
+        if(xL < (-ta)){C.inf[t] <- G(xL - theta0) - G(xstar-theta0)}
+        if(abs(xL) < ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0)}
+      }
+      }
+    }
+      # C.sup
+    if(abs(xtilde) <= ta){
+      if(xhat > ta){C.sup[t] <- G(xhat - theta0) - G(ta-theta0)}
+      if(xhat < (-ta)){C.sup[t] <- G(xhat - theta0) - G(-ta-theta0)}
+      if(abs(xhat) < ta){C.sup[t] <- 0}
+    }else{
+      if(xtilde > ta){C.sup[t] <- G(xhat - theta0) - G(xtilde-theta0)}else{
+        if(xtilde < (-ta)){
+          if(xhat > ta){C.sup[t] <- G(-ta - theta0) - G(xtilde-theta0) + G(xhat - theta0) - G(ta - theta0)}
+          if(xhat < (-ta)){C.sup[t] <- G(xhat - theta0) - G(xtilde-theta0)}
+          if(abs(xhat) < ta){C.sup[t] <- G(-ta - theta0) - G(xtilde-theta0)}
+        }
+      }
+    }
+  }
+  ## 
   
   # numeric proxy for frequentist coverage
   C.num <- sapply(thetaseq,function(theta0){
