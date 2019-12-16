@@ -17,7 +17,7 @@ source("functions/coverage.R")
 alpha <- 0.05
 cols <- c("grey","green","red","blue","orange","magenta")
 w <- 1
-#w <- 0.2 # Supplemental
+w <- 0.2 # Supplemental
 
 if(w==1){pdf("Figures/figcov.pdf",width=9)}else{pdf("Figures/SFcov.pdf",width=9)}
 par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))

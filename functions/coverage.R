@@ -72,7 +72,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   }
   
   if(plot.cov == F){
-    return(list(C.inf=C.inf, C.sup=C.sup, C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob))
+    return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob))
     }else{
       #plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
       #abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
@@ -83,9 +83,9 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
     
       plot(thetaseq,prob*C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,prob*C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,prob*C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,prob*C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
+      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,(prob*C.sup)[order(thetaseq,decreasing=T)]),col="white",border="white")
+      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,(prob*C.sup)[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
+      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,(prob*C.sup)[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
         
       lines(thetaseq,C.num,col='black',lwd=2,lty=1) # internal prob adjustment
