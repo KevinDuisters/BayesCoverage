@@ -48,7 +48,7 @@ R3f <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha/2 - (1-w)/(2*w)*a
 
 
 alpha <- 0.05
-lambdas <- c(0.75,7.5)
+lambdas <- c(0.5,5)
 w <- 1
 #w<-0.2
 
