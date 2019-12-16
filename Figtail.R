@@ -14,7 +14,7 @@ alphaseq <- seq(h,1-h,h)
 #wseq <- c(alphaseq,1)
 wseq <- seq(0,1,h)
 
-lambda1 <- 0.75
+lambda1 <- 0.5
 densities <- c("N(0,1)","Lap(0,1)","t10","t5","t3","t2","Cauchy(0,1)")
 cols <- c("black","blue","darkgreen","chartreuse4","aquamarine3","green","red")
 ltys <- c(5,1,3,3,3,3,4)
@@ -23,7 +23,7 @@ ld <- length(densities)
 # lambda sensitivity
 lambdaseq <- c(0.25,0.5,0.75,1,2.5,5,7.5)
 ll <- length(lambdaseq)
-lambdaltys <- c(2,3,1,4,5,6,1)
+lambdaltys <- c(2,1,3,4,5,1,6)
 lambdacols <- rep(cols[which(densities=="Lap(0,1)")],ll)
 
 
