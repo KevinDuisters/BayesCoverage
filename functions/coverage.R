@@ -51,9 +51,15 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   # numeric proxy for frequentist coverage
   C.num <- sapply(thetaseq,function(theta0){
               Xcov <- xgrid[which(Ugrid >= theta0 & Lgrid <= theta0)]
-              return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))
+              return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))  # Dec 2019: this makes an internal t_{alpha} prob adjustment
               })  
   
+  # Addition Dec 2019: P_{theta_0}(|X| > t_{alpha}) adjustment for C.inf and C.sup:  numeric proxy 
+  prob <- sapply(thetaseq,function(theta0){
+          Xprob <- xgrid[regimeU==0]
+          return(sum(g(Xprob - theta0))/sum(g(xgrid-theta0)))
+  }
+    )
   
   # coverage regime
   regimeCinf <- regimeCsup <- numeric(length(thetaseq))
@@ -66,23 +72,30 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
   }
   
   if(plot.cov == F){
-    return(list(C.inf=C.inf, C.sup=C.sup, C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup))
+    return(list(C.inf=C.inf, C.sup=C.sup, C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob))
     }else{
-      plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
+      #plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
+      #abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
+      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
+      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
+      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
+      #text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
+    
+      plot(thetaseq,prob*C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
+      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,prob*C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
+      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,prob*C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
+      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(prob*C.inf,prob*C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
-      
-      lines(thetaseq,C.num,col='black',lwd=2,lty=1)
+        
+      lines(thetaseq,C.num,col='black',lwd=2,lty=1) # internal prob adjustment
       #points(thetaseq,C.num,col='black',pch=16,cex=0.5)
       
       for(r in 5:0){
         reg <- (regimeCinf==r) # inf
-        if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r+1],lty=2)}
+        if(sum(reg)>0){lines(thetaseq[reg],prob*C.inf[reg],col=cols[r+1],lty=2)}
         reg <- (regimeCsup==r) # sup
-        if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r+1],lty=2)}
+        if(sum(reg)>0){lines(thetaseq[reg],prob*C.sup[reg],col= cols[r+1],lty=2)}
       }
       
       
