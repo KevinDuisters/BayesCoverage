@@ -15,7 +15,6 @@ source("functions/coverage.R")
 #--------------------------------------------------------------------------------------------------------------------#
 # Plot Coverage
 alpha <- 0.05
-cols <- c("grey","green","red","blue","orange","magenta")
 w <- 1
 #w <- 0.2 # Supplemental
 
@@ -24,9 +23,9 @@ par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 lambdas <- c(0.5,5)
 for(lambda in lambdas){
-  thetaseq <- seq(lambda+0.005,lambda+14,0.005)
-  coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T,cols) 
-  coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T,cols) 
+  thetaseq <- c(seq(lambda+0.005,lambda+8,0.0001),seq(lambda+8,0.01)) # slow but need accuracy to avoid appearance of 'discontinuity'
+  coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T) 
+  coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T) 
 }
 
 dev.off()
@@ -37,8 +36,8 @@ par(mfrow=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 lambdas <- c(0.5,5)
 for(lambda in lambdas){
-  thetaseq <- seq(lambda+0.005,lambda+14,0.005)
-  coverage(thetaseq,alpha,lambda,w,dist="t3",plot.cov=T,cols) 
+  thetaseq <- seq(lambda+0.005,lambda+14,0.001)
+  coverage(thetaseq,alpha,lambda,w,dist="t3",plot.cov=T) 
 }
 
 dev.off()

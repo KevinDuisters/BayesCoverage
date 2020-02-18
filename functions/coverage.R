@@ -4,10 +4,11 @@
 # Math Institute, Leiden University
 # Oct 2018
 #--------------------------------------------------------------------------------------------------------------------#
+# update Feb 20: exclude inf/sup region
+
 #--------------------------------------------------------------------------------------------------------------------#
 # Coverage function
-
-coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+1)){
+coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
   
   xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
@@ -116,21 +117,31 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F,cols=rep("black",5+
     }else{
       plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
-      polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
+      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
+      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
+      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
     
-      lines(thetaseq,C.num,col='black',lwd=2,lty=1)
-      #points(thetaseq,C.num,col='black',pch=16,cex=0.5)
+      #lines(thetaseq,C.num,col='black',lwd=2,lty=1)
       
-      for(r in 5:0){
-        reg <- (regimeCinf==r) # inf
-        if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r+1],lty=2)}
-        reg <- (regimeCsup==r) # sup
-        if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r+1],lty=2)}
-      }
       
+      #for(r in 5:0){
+       # reg <- (regimeCinf==r) # inf
+        #if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r+1],lty=2)}
+        #reg <- (regimeCsup==r) # sup
+        #if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r+1],lty=2)}
+      #}
+      
+      col.tvec <- sapply(thetaseq,function(theta0){
+        reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
+        if(is.na(mean(reg.t))){col.t <- "white"}else{
+          col.t <- rgb(red=sum(reg.t%in%c(2,4))/length(reg.t),green=sum(reg.t%in%c(1,5))/length(reg.t),blue=sum(reg.t==3)/length(reg.t),alpha=1)
+        }
+        return(col.t)
+        }
+        )
+      
+      points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.7)
       
       
     }
