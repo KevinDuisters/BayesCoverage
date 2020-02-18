@@ -23,7 +23,7 @@ par(mfcol=c(2,2),xpd=F,mar=c(4,4,2,2))
 
 lambdas <- c(0.5,5)
 for(lambda in lambdas){
-  thetaseq <- c(seq(lambda+0.005,lambda+8,0.0001),seq(lambda+8,0.01)) # slow but need accuracy to avoid appearance of 'discontinuity'
+  thetaseq <- c(seq(lambda+0.005,lambda+10,0.0001),seq(lambda+10,lambda+14,0.01))
   coverage(thetaseq,alpha,lambda,w,dist="Normal",plot.cov=T) 
   coverage(thetaseq,alpha,lambda,w,dist="Lap",plot.cov=T) 
 }
