@@ -141,7 +141,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
         }
         )
       
-      points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.7)
+      points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.5)
       
       
     }
