@@ -47,7 +47,7 @@ code.chunk <- function(lambda,w,alpha,h=0.01){
   xL.sup <-sapply(theta0seq,function(theta0){xgrid[max(which(Lgrid<=theta0))]})
   
   
-  plot(xgrid,xgrid,ylab=expression(paste(L[alpha](x)," and ",U[alpha](x))),xlab=expression(x),type="n",xlim=ranges,ylim=ranges,asp=1)
+  plot(xgrid,xgrid,ylab=expression(paste(L[alpha](x)," and ",U[alpha](x))),xlab=expression(x),type="n",xlim=ranges,ylim=1.5*ranges)
   abline(h=c(-lambda,lambda),lty=3,col="grey")
   ta <-max(0,xgrid[((w/(1-w))*(plaplace(xgrid - lambda) + plaplace(-xgrid - lambda))/dlaplace(xgrid)) <= (alpha/(1-alpha))])
   
@@ -77,7 +77,7 @@ code.chunk <- function(lambda,w,alpha,h=0.01){
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualize
-#pdf("Figures/figLU.pdf",width=9)
+pdf("Figures/figLU.pdf",width=12,height=4.5)
 
 par(mfrow=c(1,3))
 code.chunk(lambda=1,w=0.25,alpha) # left
@@ -86,6 +86,6 @@ code.chunk(lambda=5,w=1,alpha) # right
 
 
 #------------------------------------------------------------------------------------------------------------------------#
-#dev.off()
+dev.off()
 
 
