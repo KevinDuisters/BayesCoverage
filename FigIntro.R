@@ -5,7 +5,6 @@
 # June 2019
 #--------------------------------------------------------------------------------------------------------------------#
 # Source functions
-source("functions/densities.R")
 source("functions/post.R")
 source("functions/getU.R")
 #--------------------------------------------------------------------------------------------------------------------#
@@ -50,12 +49,22 @@ x <- 1.25
 plot(0,0,type="n",ylim=c(0,0.7),xlim=c(-xl,xl),xaxt="s",yaxt="n",xlab=expression(theta),ylab="Density")
 abline(v=c(-lambda,lambda),lty=3,col="grey")
 mtext(c(expression(-lambda),expression(lambda)),line=1,side=1,at=c(-lambda,lambda))
-arrows(-xl,1/(6-2*lambda),-lambda,1/(6-2*lambda),lwd=1.5,angle=15,length=0.10,code=1)
-arrows(lambda,1/(6-2*lambda),xl,1/(6-2*lambda),lwd=1.5,angle=15,length=0.10,code=2)
+arrows(-xl,w*1/(6-2*lambda),-lambda,w*1/(6-2*lambda),lwd=1.5,angle=15,length=0.10,code=1)
+arrows(lambda,w*1/(6-2*lambda),xl,w*1/(6-2*lambda),lwd=1.5,angle=15,length=0.10,code=2)
 segments(-lambda,0,lambda,0,lwd=1.5)
 points(c(-lambda,lambda),rep(0,2),pch=21,bg=1)
-points(c(-lambda,lambda),rep(1/(6-2*lambda),2),pch=21,bg="white")
-text(x=3,y=0.17,expression(paste(pi,"(",theta,")")),adj=0)
+points(c(-lambda,lambda),rep(w*1/(6-2*lambda),2),pch=21,bg="white")
+
+if(w==0.25){
+arrows(x0=0,x1=0,y0=0,y1=0.65,lwd=3,angle=15,length=0.10)
+text(x=0.5,y=0.65,expression(paste(P,"(",theta,"=0) = 1-w")),adj=0)
+text(x=3,y=0.105,expression(paste(pi,"(",theta,")")),adj=0)
+}
+if(w==1){text(x=3,y=0.17,expression(paste(pi,"(",theta,")")),adj=0)}
+
+
+
+
 
 
 # b top (# the 0.65 for the spike is just a choice for visual illustration, has nothing to do with 1-w)

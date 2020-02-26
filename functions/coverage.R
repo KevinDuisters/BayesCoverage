@@ -8,7 +8,7 @@
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Coverage function
-coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
+coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.title=T,plot.neg=F){
   
   excl <- T # update Feb 20: exclude inf/sup region, code is no longer used
   
@@ -149,14 +149,27 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
   if(plot.cov == F){
     return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,colvec=col.tvec))
     }else{
+      if(plot.neg==F){
       plot(thetaseq,C.sup,type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1),xlim=c(0,thetamax))
-      title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))
+      if(plot.cov.title==T){title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))}
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
       abline(v=lambda,lty=3,col="darkgrey")
       text(expression(lambda),x=lambda+0.4,y=1-2*alpha+0.005)
       for(i in 2:length(thetaseq)){
         segments(x0=thetaseq[i-1],x1=thetaseq[i],y0=C.num[i-1],y1=C.num[i],col=col.tvec[i])
+      }
+      }else{
+        plot(thetaseq,C.sup,type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1),xlim=c(-thetamax,thetamax))
+        if(plot.cov.title==T){title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))}
+        abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
+        text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
+        abline(v=c(-lambda,lambda),lty=3,col="darkgrey")
+        text(c(expression(-lambda),expression(lambda)),x=c(-lambda-0.4,lambda+0.4),y=rep(1-2*alpha+0.005,2))
+        for(i in 2:length(thetaseq)){
+          segments(x0=thetaseq[i-1],x1=thetaseq[i],y0=C.num[i-1],y1=C.num[i],col=col.tvec[i])
+          segments(x0=-thetaseq[i-1],x1=-thetaseq[i],y0=C.num[i-1],y1=C.num[i],col=col.tvec[i])
+        } 
       }
       
     }
