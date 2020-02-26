@@ -15,8 +15,7 @@ source("functions/coverage.R")
 #--------------------------------------------------------------------------------------------------------------------#
 # Universal parameters
 alpha <- 0.05
-h <- 0.01 # theta grid stepsize (slows down code!) for testing
-#h <- 0.0001 # final version of figures (30 mins)
+h <- 0.001 # theta grid stepsize (change to 0.05 for speed when testing)
 thetamax <- 15 # thetaseq endpoint
 #--------------------------------------------------------------------------------------------------------------------#
 
@@ -30,6 +29,5 @@ coverage(alpha,lambda=5,w=0.25,thetamax,h,dist="Lap",plot.cov=T)
 coverage(alpha,lambda=5,w=1,thetamax,h,dist="Normal",plot.cov=T)
 coverage(alpha,lambda=5,w=1,thetamax,h,dist="Lap",plot.cov=T)
 coverage(alpha,lambda=0.5,w=1,thetamax,h,dist="Lap",plot.cov=T)
-
 
 dev.off()
