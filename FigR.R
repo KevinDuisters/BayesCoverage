@@ -69,9 +69,9 @@ X5 <- -X1
     mtext(c(expression(-t[alpha]),expression(t[alpha])),side=1,at=c(-ta,ta),line=1)
   }
   
-  lines(xgrid,R1,col="blue",lty=2)
+  lines(xgrid,R1,col="green",lty=2)
   lines(xgrid,R2,col="red",lty=2)
-  lines(xgrid,R3,col="green",lty=2)
+  lines(xgrid,R3,col="blue",lty=2)
   
   # Active x in regime
   lines(X1[abs(X1)>ta],R1f(X1[abs(X1)>ta],alpha,w,lambda),col="green",lty=1)
