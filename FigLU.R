@@ -28,6 +28,8 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
   xgrid <- seq(-20-lambda,20+lambda,h)
   ranges <- c(-10,10)
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
+  #cols <- c("green","red","blue","red","green")
+  cols <- rep("black",5)
   
   for(i in 1:length(xgrid)){
     x <- xgrid[i]
@@ -65,14 +67,14 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
   
   for(r in 0:5){
     reg <- which(regimeU==r)
-    lines(xgrid[reg],Ugrid[reg],col="black")
+    lines(xgrid[reg],Ugrid[reg],col=cols[r])
     
     reg <- which(regimeL==r)
-    lines(xgrid[reg],Lgrid[reg],col="blue")
+    lines(xgrid[reg],Lgrid[reg],col=cols[r],lty=2)
   }
   
   mtext(c(expression(-lambda),expression(lambda)),line=-1.5,side=2,at=c(-lambda,lambda),cex=cx)
-  legend("topleft",c(expression(U[alpha]),expression(L[alpha])),lty=c(1,1),col=c("black","blue"),horiz=F,bg="white",box.col="white",seg.len=2,cex=cx)
+  legend("topleft",c(expression(U[alpha]),expression(L[alpha])),lty=c(1,2),col=c("black","black"),horiz=F,bg="white",box.col="white",seg.len=2,cex=cx)
   box()
   title(bquote(paste("Laplace(0,1), ",lambda==.(lambda),", ",w==.(w))))
   }
