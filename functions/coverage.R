@@ -117,11 +117,20 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
   ## 
   }
   
-  # numeric proxy for frequentist coverage
+  ## numeric proxy for frequentist coverage
   C.num <- sapply(thetaseq,function(theta0){
               Xcov <- xgrid[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
               return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))
               })  
+  # color numeric proxy
+  col.tvec <- sapply(thetaseq,function(theta0){
+    reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
+    if(is.na(mean(reg.t))){col.t <- "white"}else{
+      col.t <- rgb(red=sum(reg.t%in%c(2,4))/length(reg.t),green=sum(reg.t%in%c(1,5))/length(reg.t),blue=sum(reg.t==3)/length(reg.t),alpha=1)
+    }
+    return(col.t)
+  })
+  
   
   regimeCinf<-regimeCsup <- NULL
   if(excl==F){
@@ -134,15 +143,9 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
     reg <- (sapply(XU.inf,function(x) regimeU[which(xgrid==x)])==r)# Sup
     if(sum(reg)>0){regimeCsup[reg] <- r}
   }
-  col.tvec <- sapply(thetaseq,function(theta0){
-    reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
-    if(is.na(mean(reg.t))){col.t <- "white"}else{
-      col.t <- rgb(red=sum(reg.t%in%c(2,4))/length(reg.t),green=sum(reg.t%in%c(1,5))/length(reg.t),blue=sum(reg.t==3)/length(reg.t),alpha=1)
-    }
-    return(col.t)
-  })
   }
   
+  ## output results
   if(plot.cov == F){
     return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,colvec=col.tvec))
     }else{
