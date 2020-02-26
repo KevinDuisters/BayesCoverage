@@ -2,14 +2,15 @@
 # On frequentist coverage of Bayesian credible sets for estimation of the mean under constraints
 # Duisters & Schmidt-Hieber
 # Math Institute, Leiden University
-# Oct 2018
+# Feb 2020
 #--------------------------------------------------------------------------------------------------------------------#
 # update Feb 20: exclude inf/sup region
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Coverage function
-coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
+coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
   
+  thetaseq <- seq(lambda,thetamax,h)
   xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
   
@@ -31,20 +32,29 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
   
   if(dist=="Lap"){
     g <- function(x){dlaplace(x,m=0,s=1)}
-    G <- function(x){plaplace(x,m=0,s=1)} 
+    G <- function(x){plaplace(x,m=0,s=1)}
+    distname<-"Laplace(0,1)"
     }
   if(dist=="Normal"){
     g <- function(x){dnorm(x,0,1)} 
-    G <- function(x){pnorm(x,0,1)} }
+    G <- function(x){pnorm(x,0,1)} 
+    distname<-"N(0,1)"
+    }
   if(dist=="t3"){
     g <- function(x){dt(x,3)} 
-    G <- function(x){pt(x,3)} }
+    G <- function(x){pt(x,3)} 
+  distname<-"t(3)"
+  }
   if(dist=="t5"){
     g <- function(x){dt(x,5)} 
-    G <- function(x){pt(x,5)} }
+    G <- function(x){pt(x,5)} 
+    distname<-"t(5)"
+    }
   if(dist=="Cauchy"){
     g <- function(x){dcauchy(x,0,1)} 
-    G <- function(x){pcauchy(x,0,1)} }
+    G <- function(x){pcauchy(x,0,1)} 
+    distname <- "Cauchy"
+    }
   
   C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
   C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
@@ -67,7 +77,7 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
     if(abs(xstar) <= ta){
       if(xcheck > ta){C.inf[t] <- G(xcheck - theta0) - G(ta-theta0)}
       if(xcheck < (-ta)){C.inf[t] <- G(xcheck - theta0) - G(-ta-theta0)}
-      if(abs(xbar) < ta){C.inf[t] <- 0}
+      if(abs(xcheck) < ta){C.inf[t] <- 0}
     }else{
       if(xstar > ta){C.inf[t] <- G(xcheck - theta0) - G(xstar-theta0)}else{
       if(xstar < (-ta)){
@@ -115,23 +125,11 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
   if(plot.cov == F){
     return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob))
     }else{
-      plot(thetaseq,C.sup,xlim=range(thetaseq),type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1))
+      plot(thetaseq,C.sup,type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1),xlim=c(0,thetamax))
+      title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
-      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="white",border="white")
-      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=45)
-      #polygon(x=c(thetaseq,sort(thetaseq,decreasing=T)),y=c(C.inf,C.sup[order(thetaseq,decreasing=T)]),col="grey90",border="white",density=20,angle=-45)
-      text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=0.8,adj=0)
-    
-      #lines(thetaseq,C.num,col='black',lwd=2,lty=1)
       
-      
-      #for(r in 5:0){
-       # reg <- (regimeCinf==r) # inf
-        #if(sum(reg)>0){lines(thetaseq[reg],C.inf[reg],col=cols[r+1],lty=2)}
-        #reg <- (regimeCsup==r) # sup
-        #if(sum(reg)>0){lines(thetaseq[reg],C.sup[reg],col= cols[r+1],lty=2)}
-      #}
-      
+      text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
       col.tvec <- sapply(thetaseq,function(theta0){
         reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
         if(is.na(mean(reg.t))){col.t <- "white"}else{
@@ -142,8 +140,8 @@ coverage <- function(thetaseq,alpha,lambda,w,dist,plot.cov=F){
         )
       
       points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.5)
-      
-      
+      abline(v=lambda,lty=3,col="darkgrey")
+      text(expression(lambda),x=lambda+0.4,y=1-2*alpha+0.005)
     }
 }
 

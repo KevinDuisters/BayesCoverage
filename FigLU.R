@@ -50,14 +50,14 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
   
   
   plot(xgrid,xgrid,ylab=expression(paste(L[alpha](x)," and ",U[alpha](x))),xlab=expression(x),type="n",xlim=ranges,ylim=1.5*ranges,cex.lab=cx)
-  abline(h=c(-lambda,lambda),lty=3,col="grey")
+  abline(h=c(-lambda,lambda),lty=3,col="darkgrey")
   ta <-max(0,xgrid[((w/(1-w))*(plaplace(xgrid - lambda) + plaplace(-xgrid - lambda))/dlaplace(xgrid)) <= (alpha/(1-alpha))])
   
   if(ta==0){ # this is a manual trick, not exact
-    abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3,col="grey")
+    abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3,col="darkgrey")
     mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])+max(xgrid[regimeU==4]))/2,(max(xgrid[regimeU==4])+min(xgrid[regimeU==2]))/2,(min(xgrid[regimeU==2])+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2),cex=cx)
   }else{
-    abline(v=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3,col="grey")
+    abline(v=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3,col="darkgrey")
     mtext(c("I","IV","","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])-ta)/2,(-ta+ta)/2,(ta+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2),cex=cx)
     mtext(c(expression(-t[alpha]),expression(t[alpha])),side=1,at=c(-ta,ta),line=1,cex=cx)
   }
@@ -74,6 +74,7 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
   mtext(c(expression(-lambda),expression(lambda)),line=-1.5,side=2,at=c(-lambda,lambda),cex=cx)
   legend("topleft",c(expression(U[alpha]),expression(L[alpha])),lty=c(1,1),col=c("black","blue"),horiz=F,bg="white",box.col="white",seg.len=2,cex=cx)
   box()
+  title(bquote(paste("Laplace(0,1), ",lambda==.(lambda),", ",w==.(w))))
   }
   
   if(output=="size"){
@@ -82,10 +83,10 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
     ta <-max(0,xgrid[((w/(1-w))*(plaplace(xgrid - lambda) + plaplace(-xgrid - lambda))/dlaplace(xgrid)) <= (alpha/(1-alpha))])
     
     if(ta==0){ # this is a manual trick, not exact
-      abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3,col="grey")
+      abline(v=c(max(xgrid[regimeU==5]),max(xgrid[regimeU==4]),min(xgrid[regimeU==2]),min(xgrid[regimeU==1])),lty=3,col="darkgrey")
       mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])+max(xgrid[regimeU==4]))/2,(max(xgrid[regimeU==4])+min(xgrid[regimeU==2]))/2,(min(xgrid[regimeU==2])+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2),cex=cx)
     }else{
-      abline(v=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3,col="grey")
+      abline(v=c(max(xgrid[regimeU==5]),-ta,ta,min(xgrid[regimeU==1])),lty=3,col="darkgrey")
       mtext(c("I","IV","","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(xgrid[regimeU==5]))/2,(max(xgrid[regimeU==5])-ta)/2,(-ta+ta)/2,(ta+min(xgrid[regimeU==1]))/2,(min(xgrid[regimeU==1])+max(ranges))/2),cex=cx)
       mtext(c(expression(-t[alpha]),expression(t[alpha])),side=1,at=c(-ta,ta),line=1,cex=cx)
     }
@@ -99,6 +100,7 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
       }
     }
     lines(xgrid,sizes)
+    title(bquote(paste("Laplace(0,1), ",lambda==.(lambda),", ",w==.(w))))
     
     
   }
@@ -120,7 +122,7 @@ dev.off()
 pdf("Figures/figsize.pdf",width=12,height=4.5)
 
 par(mfrow=c(1,3))
-code.chunk(lambda=1,w=0.25,alpha,output="size") # left
+code.chunk(lambda=0.5,w=0.25,alpha,output="size") # left
 code.chunk(lambda=5,w=0.25,alpha,output="size") # mid
 code.chunk(lambda=5,w=1,alpha,output="size") # right
 
