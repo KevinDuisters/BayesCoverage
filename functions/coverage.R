@@ -11,7 +11,9 @@
 coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
   
   thetaseq <- seq(lambda,thetamax,h)
-  xgrid <- seq(min(thetaseq)-20,max(thetaseq)+15,0.005)
+  xgrid <- seq(min(thetaseq)-20,max(thetaseq)+25,0.005)
+  
+  
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
   
   for(i in 1:length(xgrid)){
@@ -45,10 +47,15 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
     G <- function(x){pt(x,3)} 
   distname<-"t(3)"
   }
-  if(dist=="t5"){
-    g <- function(x){dt(x,5)} 
-    G <- function(x){pt(x,5)} 
-    distname<-"t(5)"
+  if(dist=="t2"){
+    g <- function(x){dt(x,2)} 
+    G <- function(x){pt(x,2)} 
+    distname<-"t(2)"
+  }
+  if(dist=="t1"){
+    g <- function(x){dt(x,1)} 
+    G <- function(x){pt(x,1)} 
+    distname<-"t(1)"
     }
   if(dist=="Cauchy"){
     g <- function(x){dcauchy(x,0,1)} 
