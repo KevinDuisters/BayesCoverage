@@ -46,7 +46,7 @@ getU <- function(x,alpha,lambda,w,dist){
   if(dist=="Cauchy"){
     g <- function(x,theta0=0){dcauchy(x,theta0,1)}
     G <- function(x,theta0=0){pcauchy(x,theta0,1)}  
-    Ginv <- function(p){qcauchy(p)}
+    Ginv <- function(p,theta0=0){qcauchy(p,theta0)}
   }
   #
   
@@ -56,10 +56,6 @@ getU <- function(x,alpha,lambda,w,dist){
   R3f <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha/2 - (1-w)/(2*w)*alpha*g(x)+(alpha/2)*(G(lambda-x)-G(-lambda-x)))))}
   D <- function(x,w,lambda){((1-w)/w)*g(x) + 1-(G(lambda - x) - G(-lambda - x))}
   
-  
-  #aux1 <- 1 - (1/2)*(alpha*(z/w)+Delta(x,lambda))
-  #aux2 <- 1 + G(-lambda-x) - alpha*(z/w)
-  #aux3 <- 1 - (1/2)*(alpha*(z/w))
   
   # re-used values
   Pi0x <- (1-w)*g(x)/(w*D(x,w,lambda)) 

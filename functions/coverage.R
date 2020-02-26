@@ -4,15 +4,17 @@
 # Math Institute, Leiden University
 # Feb 2020
 #--------------------------------------------------------------------------------------------------------------------#
-# update Feb 20: exclude inf/sup region
+# update Feb 20: exclude inf/sup region, code is no longer used
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Coverage function
 coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
   
-  thetaseq <- seq(lambda,thetamax,h)
-  xgrid <- seq(min(thetaseq)-20,max(thetaseq)+25,0.005)
+  excl <- T # update Feb 20: exclude inf/sup region, code is no longer used
   
+  thetaseq <- seq(lambda,thetamax,h)
+  xgrid <- seq(min(thetaseq)-30,max(thetaseq)+30,0.005)
+  if(dist=="Cauchy"| dist=="t1"){xgrid <- seq(min(thetaseq)-250,max(thetaseq)+250,0.005)}
   
   Ugrid <- Lgrid <- regimeU <- regimeL <- numeric(length(xgrid))
   
@@ -27,10 +29,6 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
     regimeL[i] <- out.L$regime
   }
   
-  XU.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid>theta0))]})
-  XU.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid<theta0))]  })
-  XL.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid<theta0))]})
-  XL.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid>theta0))]})
   
   if(dist=="Lap"){
     g <- function(x){dlaplace(x,m=0,s=1)}
@@ -63,53 +61,61 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
     distname <- "Cauchy"
     }
   
-  C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
-  C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
-  
-  ## The following adjustment is theoretically correct but I haven't seen practical differences for my choices of g,alpha,w,lambda
-  # t alpha adjustment
+  # determine t_alpha
   ta <- -1e8
   if(2*G(-lambda) <= ((1-w)/w)*(alpha/(1-alpha))*g(0)){
-  ta <-max(0,xgrid[((w/(1-w))*(G(xgrid - lambda) + G(-xgrid - lambda))/g(xgrid)) <= (alpha/(1-alpha))])
+    ta <-max(0,xgrid[((w/(1-w))*(G(xgrid - lambda) + G(-xgrid - lambda))/g(xgrid)) <= (alpha/(1-alpha))])
   }
   
-  for(t in 1:length(thetaseq)){
-    theta0 <- thetaseq[t]
-    xstar <- XU.sup[t]
-    xtilde <- XU.inf[t]
-    xcheck <- XL.inf[t]
-    xhat <- XL.sup[t]
+  C.inf <- C.sup <- NULL
+  if(excl==F){
+    XU.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Ugrid>theta0))]})
+    XU.sup <- sapply(thetaseq,function(theta0){xgrid[max(which(Ugrid<theta0))]  })
+    XL.sup <-sapply(thetaseq,function(theta0){xgrid[max(which(Lgrid<theta0))]})
+    XL.inf <- sapply(thetaseq,function(theta0){xgrid[min(which(Lgrid>theta0))]})
+  
+    C.inf <- G(XL.inf-thetaseq)-G(XU.sup-thetaseq)
+    C.sup <- G(XL.sup-thetaseq)-G(XU.inf-thetaseq)
+  
+  
+    for(t in 1:length(thetaseq)){
+      theta0 <- thetaseq[t]
+      xstar <- XU.sup[t]
+      xtilde <- XU.inf[t]
+      xcheck <- XL.inf[t]
+      xhat <- XL.sup[t]
     
-    # C.inf
-    if(abs(xstar) <= ta){
-      if(xcheck > ta){C.inf[t] <- G(xcheck - theta0) - G(ta-theta0)}
-      if(xcheck < (-ta)){C.inf[t] <- G(xcheck - theta0) - G(-ta-theta0)}
-      if(abs(xcheck) < ta){C.inf[t] <- 0}
-    }else{
-      if(xstar > ta){C.inf[t] <- G(xcheck - theta0) - G(xstar-theta0)}else{
-      if(xstar < (-ta)){
-        if(xcheck > ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0) + G(xcheck - theta0) - G(ta - theta0)}
-        if(xcheck < (-ta)){C.inf[t] <- G(xcheck - theta0) - G(xstar-theta0)}
-        if(abs(xcheck) < ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0)}
+      # C.inf
+      if(abs(xstar) <= ta){
+        if(xcheck > ta){C.inf[t] <- G(xcheck - theta0) - G(ta-theta0)}
+        if(xcheck < (-ta)){C.inf[t] <- G(xcheck - theta0) - G(-ta-theta0)}
+        if(abs(xcheck) < ta){C.inf[t] <- 0}
+      }else{
+        if(xstar > ta){C.inf[t] <- G(xcheck - theta0) - G(xstar-theta0)}else{
+           if(xstar < (-ta)){
+              if(xcheck > ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0) + G(xcheck - theta0) - G(ta - theta0)}
+              if(xcheck < (-ta)){C.inf[t] <- G(xcheck - theta0) - G(xstar-theta0)}
+              if(abs(xcheck) < ta){C.inf[t] <- G(-ta - theta0) - G(xstar-theta0)}
       }
       }
     }
       # C.sup
-    if(abs(xtilde) <= ta){
-      if(xhat > ta){C.sup[t] <- G(xhat - theta0) - G(ta-theta0)}
-      if(xhat < (-ta)){C.sup[t] <- G(xhat - theta0) - G(-ta-theta0)}
-      if(abs(xhat) < ta){C.sup[t] <- 0}
-    }else{
-      if(xtilde > ta){C.sup[t] <- G(xhat - theta0) - G(xtilde-theta0)}else{
-        if(xtilde < (-ta)){
-          if(xhat > ta){C.sup[t] <- G(-ta - theta0) - G(xtilde-theta0) + G(xhat - theta0) - G(ta - theta0)}
-          if(xhat < (-ta)){C.sup[t] <- G(xhat - theta0) - G(xtilde-theta0)}
-          if(abs(xhat) < ta){C.sup[t] <- G(-ta - theta0) - G(xtilde-theta0)}
+      if(abs(xtilde) <= ta){
+        if(xhat > ta){C.sup[t] <- G(xhat - theta0) - G(ta-theta0)}
+        if(xhat < (-ta)){C.sup[t] <- G(xhat - theta0) - G(-ta-theta0)}
+        if(abs(xhat) < ta){C.sup[t] <- 0}
+      }else{
+        if(xtilde > ta){C.sup[t] <- G(xhat - theta0) - G(xtilde-theta0)}else{
+          if(xtilde < (-ta)){
+              if(xhat > ta){C.sup[t] <- G(-ta - theta0) - G(xtilde-theta0) + G(xhat - theta0) - G(ta - theta0)}
+              if(xhat < (-ta)){C.sup[t] <- G(xhat - theta0) - G(xtilde-theta0)}
+              if(abs(xhat) < ta){C.sup[t] <- G(-ta - theta0) - G(xtilde-theta0)}
+        }
         }
       }
-    }
   }
   ## 
+  }
   
   # numeric proxy for frequentist coverage
   C.num <- sapply(thetaseq,function(theta0){
@@ -117,8 +123,8 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
               return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))
               })  
   
-  
-  
+  regimeCinf<-regimeCsup <- NULL
+  if(excl==F){
   # coverage regime
   regimeCinf <- regimeCsup <- numeric(length(thetaseq))
   for(r in 5:0){
@@ -135,6 +141,7 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
     }
     return(col.t)
   })
+  }
   
   if(plot.cov == F){
     return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,colvec=col.tvec))

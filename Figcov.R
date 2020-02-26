@@ -66,8 +66,9 @@ code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="Normal")
 code.chunk(alpha=0.05,lambda=0.5,wseq,thetamax,h,dist="Lap")
 code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="Lap")
 
-code.chunk(alpha=0.05,lambda=0.5,wseq,thetamax,h,dist="t2")
-code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="t2")
+code.chunk(alpha=0.05,lambda=0.5,wseq,thetamax,h,dist="t1")
+code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="t1")
+
 
 
 
