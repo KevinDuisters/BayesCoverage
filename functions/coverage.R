@@ -139,7 +139,12 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
         }
         )
       
-      points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.5)
+      #points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.5)
+      for(i in 2:length(thetaseq)){
+        segments(x0=thetaseq[i-1],x1=thetaseq[i],y0=C.num[i-1],y1=C.num[i],col=col.tvec[i])
+      }
+      
+      
       abline(v=lambda,lty=3,col="darkgrey")
       text(expression(lambda),x=lambda+0.4,y=1-2*alpha+0.005)
     }
