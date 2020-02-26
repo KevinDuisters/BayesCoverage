@@ -130,24 +130,18 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
   })
   
   if(plot.cov == F){
-    return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob,colvec=col.tvec))
+    return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,colvec=col.tvec))
     }else{
       plot(thetaseq,C.sup,type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1),xlim=c(0,thetamax))
       title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
-      
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
-      
-        
-      
-      #points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.5)
+      abline(v=lambda,lty=3,col="darkgrey")
+      text(expression(lambda),x=lambda+0.4,y=1-2*alpha+0.005)
       for(i in 2:length(thetaseq)){
         segments(x0=thetaseq[i-1],x1=thetaseq[i],y0=C.num[i-1],y1=C.num[i],col=col.tvec[i])
       }
       
-      
-      abline(v=lambda,lty=3,col="darkgrey")
-      text(expression(lambda),x=lambda+0.4,y=1-2*alpha+0.005)
     }
 }
 

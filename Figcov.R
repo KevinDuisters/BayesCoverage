@@ -13,21 +13,49 @@ source("functions/getU.R")
 source("functions/coverage.R")
 
 #--------------------------------------------------------------------------------------------------------------------#
-# Universal parameters
-alpha <- 0.05
-h <- 0.001 # theta grid stepsize (change to 0.05 for speed when testing)
-thetamax <- 15 # thetaseq endpoint
+# Code chunk for plotting multiple w's in one figure
+code.chunk <- function(lambda,alpha,wseq,dist,thetamax,h){
+  
+  
+  thetaseq <- seq(lambda,thetamax,h) # same as inside coverage function
+  if(dist=="Lap"){distname <- "Laplace(0,1)"}
+  if(dist=="Normal"){distname <- "N(0,1)"}
+  if(dist=="t3"){distname <- "t(3)"}
+  
+  plot(thetaseq,thetaseq,type="n",ylim=c(0.84,1),xlab=expression(theta[0]),ylab=expression(C(theta[0])),xlim=c(0,thetamax))
+  title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",alpha==.(alpha))))
+  abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2),lty=rep(3,3),col=rep("grey",3))
+  text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
+  abline(v=lambda,lty=3,col="darkgrey")
+  text(expression(lambda),x=lambda+0.4,y=1-2*alpha+0.005)
+  
+  for(w in wseq){
+    obj <- coverage(alpha,lambda,w,dist,thetamax,h,plot.cov=F)
+    for(i in 2:length(thetaseq)){
+      segments(x0=thetaseq[i-1],x1=thetaseq[i],y0=obj$C.num[i-1],y1=obj$C.num[i],col=obj$colvec[i])
+    }
+  }
+}
 #--------------------------------------------------------------------------------------------------------------------#
+# Universal parameters
+#h <- 0.001 # theta grid stepsize (change to 0.05 for speed when testing)
+h <- 0.05 # theta grid stepsize (change to 0.05 for speed when testing)
+thetamax <- 15 # thetaseq endpoint
 
-
+#--------------------------------------------------------------------------------------------------------------------#
+# Visualze panel
 pdf("Figures/figcov.pdf",width=12,height=9)
 
 par(mfcol=c(2,3))
-coverage(alpha,lambda=0.5,w=0.25,thetamax,h,dist="Lap",plot.cov=T)
-coverage(alpha,lambda=0.5,w=0.25,thetamax,h,dist="t3",plot.cov=T)
-coverage(alpha,lambda=5,w=0.25,thetamax,h,dist="Lap",plot.cov=T)
-coverage(alpha,lambda=5,w=1,thetamax,h,dist="Normal",plot.cov=T)
-coverage(alpha,lambda=5,w=1,thetamax,h,dist="Lap",plot.cov=T)
-coverage(alpha,lambda=0.5,w=1,thetamax,h,dist="Lap",plot.cov=T)
+#code.chunk(alpha=0.05,lambda=0.5,w=0.25,thetamax,h,dist="Lap")
+#code.chunk(alpha=0.05,lambda=0.5,w=0.25,thetamax,h,dist="t3")
+#code.chunk(alpha=0.05,lambda=5,w=0.25,thetamax,h,dist="Lap")
+#code.chunk(alpha=0.05,lambda=5,w=1,thetamax,h,dist="Normal")
+#code.chunk(alpha=0.05,lambda=5,w=1,thetamax,h,dist="Lap")
+#code.chunk(alpha=0.05,lambda=0.5,w=1,thetamax,h,dist="Lap")
+
+
+
+
 
 dev.off()
