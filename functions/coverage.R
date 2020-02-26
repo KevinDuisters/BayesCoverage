@@ -121,23 +121,24 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F){
     reg <- (sapply(XU.inf,function(x) regimeU[which(xgrid==x)])==r)# Sup
     if(sum(reg)>0){regimeCsup[reg] <- r}
   }
+  col.tvec <- sapply(thetaseq,function(theta0){
+    reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
+    if(is.na(mean(reg.t))){col.t <- "white"}else{
+      col.t <- rgb(red=sum(reg.t%in%c(2,4))/length(reg.t),green=sum(reg.t%in%c(1,5))/length(reg.t),blue=sum(reg.t==3)/length(reg.t),alpha=1)
+    }
+    return(col.t)
+  })
   
   if(plot.cov == F){
-    return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob))
+    return(list(C.inf=C.inf, C.sup=C.sup,C.num= C.num, xgrid=xgrid,regimeU=regimeU,regimeL=regimeL,regimeCinf=regimeCinf,regimeCsup=regimeCsup,prob=prob,colvec=col.tvec))
     }else{
       plot(thetaseq,C.sup,type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1),xlim=c(0,thetamax))
       title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
       
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
-      col.tvec <- sapply(thetaseq,function(theta0){
-        reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
-        if(is.na(mean(reg.t))){col.t <- "white"}else{
-          col.t <- rgb(red=sum(reg.t%in%c(2,4))/length(reg.t),green=sum(reg.t%in%c(1,5))/length(reg.t),blue=sum(reg.t==3)/length(reg.t),alpha=1)
-        }
-        return(col.t)
-        }
-        )
+      
+        
       
       #points(thetaseq,C.num,col=col.tvec,pch=16,cex=0.5)
       for(i in 2:length(thetaseq)){
