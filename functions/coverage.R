@@ -8,7 +8,7 @@
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Coverage function
-coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.title=T,plot.neg=F){
+coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.title=T,plot.neg=F,line.col=NULL){
   
   excl <- T # update Feb 20: exclude inf/sup region, code is no longer used
   
@@ -123,6 +123,7 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.tit
               return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))
               })  
   # color numeric proxy
+  if(line.col==NULL){
   col.tvec <- sapply(thetaseq,function(theta0){
     reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
     if(is.na(mean(reg.t))){col.t <- "white"}else{
@@ -130,6 +131,9 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.tit
     }
     return(col.t)
   })
+  }else{
+    col.tvec <- rep(line.col,length(thetaseq))
+  }
   
   
   regimeCinf<-regimeCsup <- NULL
