@@ -33,7 +33,7 @@ R3f <- function(x,alpha,w,lambda){Ginv(pmax(0,pmin(1,1 - alpha/2 - (1-w)/(2*w)*a
 
 #--------------------------------------------------------------------------------------------------------------------#
 # codechunk for plotting
-code.chunk <- function(lambda,alpha,w,distname,h=0.0001){
+code.chunk <- function(lambda,alpha,w,distname,h=0.01){
   
   xgrid <- seq(0,15,h)
   ranges <- c(0,10)
@@ -57,15 +57,9 @@ code.chunk <- function(lambda,alpha,w,distname,h=0.0001){
   ta <-max(0,xgrid[((w/(1-w))*(G(xgrid - lambda) + G(-xgrid - lambda))/g(xgrid)) <= (alpha/(1-alpha))])
   
   if(ta==0){ # this is a manual trick, not exact
-    #abline(v=c(max(X5),max(X4),min(X2),min(X1)),lty=3,col="darkgrey")
-    #mtext(c("I","IV","III","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(X5))/2,(max(X5)+max(X4))/2,(max(X4)+min(X2))/2,(min(X2)+min(X1))/2,(min(X1)+max(ranges))/2))
     abline(v=c(min(X2),min(X1)),lty=3,col="darkgrey")
     mtext(c("III","II","I"),side=1,adj=0.5,line=-1.5,at=c((max(X4)+min(X2))/2,(min(X2)+min(X1))/2,(min(X1)+max(ranges))/2))
-    
   }else{
-    # abline(v=c(max(X5),-ta,ta,min(X1)),lty=3,col="darkgrey")  
-    # mtext(c("I","IV","-","II","I"),side=1,adj=0.5,line=-1.5,at=c((min(ranges)+max(X5))/2,(max(X5)-ta)/2,(-ta+ta)/2,(ta+min(X1))/2,(min(X1)+max(ranges))/2))
-    # mtext(c(expression(-t[alpha]),expression(t[alpha])),side=1,at=c(-ta,ta),line=1)
     abline(v=c(ta,min(X1)),lty=3,col="darkgrey")  
     mtext(c("-","II","I"),side=1,adj=0.5,line=-1.5,at=c((-ta+ta)/2,(ta+min(X1))/2,(min(X1)+max(ranges))/2))
     mtext(c(expression(t[alpha])),side=1,at=c(ta),line=1)
@@ -82,7 +76,7 @@ code.chunk <- function(lambda,alpha,w,distname,h=0.0001){
   
   
 }
-# note, could use this code to generate L,U figures as well (replace getU function). Gives the same results.
+
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualize R function
