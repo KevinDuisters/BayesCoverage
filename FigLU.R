@@ -113,7 +113,7 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
 pdf("Figures/figLU.pdf",width=12,height=4.5)
 
 par(mfrow=c(1,3))
-code.chunk(lambda=1,w=0.25,alpha,output="LU") # left
+code.chunk(lambda=0.5,w=0.25,alpha,output="LU") # left
 code.chunk(lambda=5,w=0.25,alpha,output="LU") # mid
 code.chunk(lambda=5,w=1,alpha,output="LU") # right
 
