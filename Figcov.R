@@ -49,7 +49,7 @@ wseq <- c(0.125,0.25,0.5,1)
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualze panel
-pdf("Figures/figcov.pdf",width=12,height=9)
+png("Figures/figcov.pdf",width=12,height=9)
 
 par(mfcol=c(2,3))
 #code.chunk(alpha=0.05,lambda=0.5,wseq=0.25,thetamax,h,dist="Lap")

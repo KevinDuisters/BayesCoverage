@@ -98,7 +98,7 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.tit
     return(list(C.num= C.num, colvec=col.tvec))
     }else{
       if(plot.neg==F){
-      plot(thetaseq,C.num,type="n",xlab=expression(theta[0]),ylab=expression(C(theta[0])),ylim=c(1-2*alpha,1),xlim=c(0,thetamax))
+      plot(thetaseq,C.num,type="n",xlab=expression(theta[0]),ylab="freq. coverage",ylim=c(1-2*alpha,1),xlim=c(0,thetamax))
       if(plot.cov.title==T){title(bquote(paste(.(distname),", ",lambda==.(lambda),", ",w==.(w))))}
       abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
       text(x=rep(max(thetaseq)-2,4),y=0.005+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
