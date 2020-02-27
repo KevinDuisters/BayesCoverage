@@ -86,7 +86,8 @@ code.chunk <- function(lambda,alpha,w,distname,h=0.0001){
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualize R function
-pdf("Figures/figR.pdf",width=12,height=4.5)
+#pdf("Figures/figR.pdf",width=12,height=4.5)
+png("Figures/figR.png",width=12,height=4.5,unit="in",res=300)
 
 par(mfrow=c(1,3)) # this is a trick to get the size exactly the same as figLU
 plot.new()

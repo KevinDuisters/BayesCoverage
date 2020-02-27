@@ -29,7 +29,8 @@ sub3 <- thetaseq>lambda
 
 #--------------------------------------------------------------------------------------------------------------------#
 # plot
-pdf("Figures/figIntro.pdf",width=12,height=9)
+#pdf("Figures/figIntro.pdf",width=12,height=9)
+png("Figures/figIntro.png",width=12,height=9,units="in",res=300)
 par(mfcol=c(2,3))
 
 
