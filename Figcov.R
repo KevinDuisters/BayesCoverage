@@ -27,7 +27,7 @@ code.chunk <- function(lambda,alpha,wseq,dist,thetamax,h){
   
   yr <- c(1-5*alpha/2-0.005,1)
   
-  plot(thetaseq,thetaseq,type="n",ylim=range(yr),xlab=expression(theta[0]),ylab=expression(C(theta[0])),xlim=c(0,thetamax))
+  plot(thetaseq,thetaseq,type="n",ylim=range(yr),xlab=expression(theta[0]),ylab="freq. coverage",xlim=c(0,thetamax))
   title(bquote(paste(.(distname),", ",lambda==.(lambda),", w = (",.(wseq[1]),", ",.(wseq[2]),", ",.(wseq[3]),", ",.(wseq[4]),")")))
   abline(h=c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),lty=rep(3,4),col=rep("grey",4))
   text(x=rep(max(thetaseq)-3,4),y=0.03*(max(yr)-min(yr))+c(1-alpha/2,1-alpha,1-3*alpha/2,1-2*alpha),labels=c(expression(1-alpha/2),expression(1-alpha),expression(1-3*alpha/2),expression(1-2*alpha)),cex=1,adj=0)
@@ -43,21 +43,16 @@ code.chunk <- function(lambda,alpha,wseq,dist,thetamax,h){
 }
 #--------------------------------------------------------------------------------------------------------------------#
 # Universal parameters
-h <- 0.001 # theta grid stepsize (change to 0.05 for speed when testing)
+h <- 0.002 # theta grid stepsize (change to 0.05 for speed when testing)
 thetamax <- 15 # thetaseq endpoint
 wseq <- c(0.125,0.25,0.5,1)
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualze panel
-png("Figures/figcov.pdf",width=12,height=9)
+#pdf("Figures/figcov.pdf",width=12,height=9)
+png("Figures/figcov.png",width=12,height=9,units="in",res=300)
 
 par(mfcol=c(2,3))
-#code.chunk(alpha=0.05,lambda=0.5,wseq=0.25,thetamax,h,dist="Lap")
-#code.chunk(alpha=0.05,lambda=0.5,wseq=0.25,thetamax,h,dist="t3")
-#code.chunk(alpha=0.05,lambda=5,wseq=0.25,thetamax,h,dist="Lap")
-#code.chunk(alpha=0.05,lambda=5,wseq=1,thetamax,h,dist="Normal")
-#code.chunk(alpha=0.05,lambda=5,wseq=1,thetamax,h,dist="Lap")
-#code.chunk(alpha=0.05,lambda=0.5,wseq=1,thetamax,h,dist="Lap")
 
 code.chunk(alpha=0.05,lambda=0.5,wseq,thetamax,h,dist="Normal")
 code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="Normal")
@@ -67,8 +62,5 @@ code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="Lap")
 
 code.chunk(alpha=0.05,lambda=0.5,wseq,thetamax,h,dist="t3")
 code.chunk(alpha=0.05,lambda=5,wseq,thetamax,h,dist="t3")
-
-
-
 
 dev.off()
