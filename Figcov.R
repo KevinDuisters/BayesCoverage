@@ -43,7 +43,7 @@ code.chunk <- function(lambda,alpha,wseq,dist,thetamax,h){
 }
 #--------------------------------------------------------------------------------------------------------------------#
 # Universal parameters
-h <- 0.005 # theta grid stepsize (change to 0.05 for speed when testing)
+h <- 0.001 # theta grid stepsize (change to 0.05 for speed when testing)
 thetamax <- 15 # thetaseq endpoint
 wseq <- c(0.125,0.25,0.5,1)
 
