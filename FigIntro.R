@@ -88,11 +88,12 @@ text(x=-3.25,y=0.3,expression(Delta[lambda](x)),adj=0)
 
 # bottom
 for(w in c(1,0.25)){
-coverage(alpha,lambda,w,dist="Normal",thetamax=xl,h=0.01,plot.cov=T,plot.cov.title=T,plot.neg=T)
+coverage(alpha,lambda,w,dist="Normal",thetamax=xl,h=0.001,plot.cov=T,plot.cov.title=T,plot.neg=T,line.col="black")
 if(w<1){points(0,1,pch=16) # theta_0 = 0 always covered since 0 always in HPD for w<1}
 }
 }
 
 dev.off()
+
 
 

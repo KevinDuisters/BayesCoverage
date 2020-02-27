@@ -123,7 +123,7 @@ coverage <- function(alpha,lambda,w,dist,thetamax,h=0.01,plot.cov=F,plot.cov.tit
               return(sum(g(Xcov - theta0))/sum(g(xgrid-theta0)))
               })  
   # color numeric proxy
-  if(line.col==NULL){
+  if(is.null(line.col)){
   col.tvec <- sapply(thetaseq,function(theta0){
     reg.t <- regimeU[which(Ugrid >= theta0 & Lgrid <= theta0 & abs(xgrid) > ta)]
     if(is.na(mean(reg.t))){col.t <- "white"}else{
