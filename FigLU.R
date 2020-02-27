@@ -80,7 +80,7 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
   }
   
   if(output=="size"){
-    plot(xgrid,xgrid,type="n",xlab="x",ylab=expression(paste("size of ",HPD[alpha](x))),xlim=ranges,ylim=c(0,2*qlaplace(1-alpha/2)),cex.lab=cx)
+    plot(xgrid,xgrid,type="n",xlab="x",ylab=expression(paste("length of ",HPD[alpha](x))),xlim=ranges,ylim=c(0,2*qlaplace(1-alpha/2)),cex.lab=cx)
     abline(h=2*qlaplace(1-alpha/2),lty=2,col="red")
     ta <-max(0,xgrid[((w/(1-w))*(plaplace(xgrid - lambda) + plaplace(-xgrid - lambda))/dlaplace(xgrid)) <= (alpha/(1-alpha))])
     
