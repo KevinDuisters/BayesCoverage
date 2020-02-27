@@ -110,8 +110,8 @@ code.chunk <- function(lambda,w,alpha,output,h=0.01){
 
 #--------------------------------------------------------------------------------------------------------------------#
 # Visualize LU
-#pdf("Figures/figLU.pdf",width=12,height=4.5)
-png("Figures/figLU.png",width=12,height=4.5,unit="in",res=300)
+pdf("Figures/figLU.pdf",width=12,height=4.5)
+#png("Figures/figLU.png",width=12,height=4.5,unit="in",res=300)
 
 par(mfrow=c(1,3))
 code.chunk(lambda=0.5,w=0.25,alpha,output="LU") # left
@@ -122,8 +122,8 @@ dev.off()
 #------------------------------------------------------------------------------------------------------------------------#
 #------------------------------------------------------------------------------------------------------------------------#
 # Visualize LU
-#pdf("Figures/figsize.pdf",width=12,height=4.5)
-png("Figures/figsize.png",width=12,height=4.5,unit="in",res=300)
+pdf("Figures/figsize.pdf",width=12,height=4.5)
+#png("Figures/figsize.png",width=12,height=4.5,unit="in",res=300)
 
 par(mfrow=c(1,3))
 code.chunk(lambda=0.5,w=0.25,alpha,output="size") # left
